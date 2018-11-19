@@ -3,10 +3,9 @@ A site checker that tests elements of your live site as need.
 
 ## tests:
 
-- [ ] check for no-follow
 - [ ] sitemap exists
 - [ ] google analytics is added
-- [ ] check for <no-follow>
+- [ ] check for `<meta name="robots" content="nofollow" />` not present
 - [ ] any 404s in console? (missing files)
 
 ## future ideas:
