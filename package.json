@@ -1,0 +1,23 @@
+{
+  "name": "litmus-lab",
+  "version": "1.0.0",
+  "description": "litmus-lab dependencies",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sodiumhalogenteam/litmus-lab.git"
+  },
+  "author": "Adam Curl",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sodiumhalogenteam/litmus-lab/issues"
+  },
+  "homepage": "https://github.com/sodiumhalogenteam/litmus-lab#readme",
+  "dependencies": {
+    "clear": "^0.1.0",
+    "minimist": "^1.2.0"
+  }
+}
