@@ -1,6 +1,6 @@
 # Litmus Lab
 
-A site checker that tests elements of your live site as needed.
+A site checker that tests elements of your live website as needed.
 
 ## tests:
 
