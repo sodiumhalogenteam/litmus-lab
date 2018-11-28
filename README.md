@@ -1,5 +1,6 @@
 # Litmus Lab
-A site checker that tests elements of your live site as need.
+
+A site checker that tests elements of your live site as needed.
 
 ## tests:
 
@@ -12,4 +13,4 @@ A site checker that tests elements of your live site as need.
 
 - [ ] check other pages on the site
 - [ ] test multiple urls?
-- [ ] add custom scripts $`litmus-lab sodiumhalogen.com --script=./custom-tests.js`
+- [ ] add custom scripts \$`litmus-lab sodiumhalogen.com --script=./custom-tests.js`
