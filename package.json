@@ -26,5 +26,9 @@
     "htmlparser2": "^3.10.0",
     "minimist": "^1.2.0",
     "prompts": "^1.2.1"
-  }
+  },
+  "contributors": [
+    "Adam Curl <admam@sodiumhalogen.com>",
+    "Chance Smith <chance@sodiumhalogen.com>"
+  ]
 }
