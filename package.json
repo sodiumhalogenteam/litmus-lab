@@ -1,10 +1,14 @@
 {
   "name": "litmus-lab",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "litmus-lab dependencies",
   "main": "index.js",
+  "bin": {
+    "litmus-lab": "index.js"
+  },
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "patch-release": "npm version patch && npm publish && git push --follow-tags"
   },
   "repository": {
     "type": "git",
