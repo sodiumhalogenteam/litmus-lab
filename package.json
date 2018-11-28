@@ -1,6 +1,6 @@
 {
   "name": "litmus-lab",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "litmus-lab dependencies",
   "main": "index.js",
   "bin": {
