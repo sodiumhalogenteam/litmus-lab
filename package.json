@@ -1,6 +1,6 @@
 {
   "name": "litmus-lab",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "litmus-lab dependencies",
   "main": "index.js",
   "bin": {
@@ -27,7 +27,8 @@
     "minimist": "^1.2.0",
     "prompts": "^1.2.1"
   },
-  "contributors": [{
+  "contributors": [
+    {
       "name": "Adam Curl",
       "email": "adam@sodiumhalogen.com",
       "url": "http://github.com/adamcurl"
