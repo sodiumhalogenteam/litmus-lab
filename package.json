@@ -27,8 +27,15 @@
     "minimist": "^1.2.0",
     "prompts": "^1.2.1"
   },
-  "contributors": [
-    "Adam Curl <admam@sodiumhalogen.com>",
-    "Chance Smith <chance@sodiumhalogen.com>"
+  "contributors": [{
+      "name": "Adam Curl",
+      "email": "adam@sodiumhalogen.com",
+      "url": "http://github.com/adamcurl"
+    },
+    {
+      "name": "Chance Smith",
+      "email": "chance@sodiumhalogen.com",
+      "url": "http://github.com/chancesmith"
+    }
   ]
 }
