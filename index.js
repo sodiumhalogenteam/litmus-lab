@@ -16,6 +16,10 @@ var parser = new htmlparser.Parser(
   { decodeEntities: true }
 );
 
+const validateURI = site => {
+  return site.includes("http://") ? site : "http://" + site;
+};
+
 const testSite = site => {
   return axios
     .get(site)
@@ -34,9 +38,11 @@ const main = async () => {
   const result = await prompts({
     type: "text",
     name: "site",
+    initial: "sodiumhalogen.com",
     message: "What site would you like to check?"
   });
-  const site = result.site;
+
+  const site = await validateURI(result.site);
 
   /*** Connect to Site ***/
   await testSite(site);
