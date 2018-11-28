@@ -1,55 +1,48 @@
 require("minimist");
-
-var head;
-
-// get command line args
-var argv = require("minimist")(process.argv.slice(2));
-
-// website name (get from cmd line option -s)
-var site = argv.s;
-if (!site) {
-  console.dir("Error: site name required.");
-}
-
-// connect to site
-const rp = require("request-promise");
+const prompts = require("prompts");
+const axios = require("axios");
 const cheerio = require("cheerio");
-const options = {
-  uri: site,
-  transform: function(body) {
-    return cheerio.load(body);
-  }
-};
-
-rp(options)
-  .then($ => {
-    // console.log($("head").html());
-    head = $("head").html();
-  })
-  .catch(err => {
-    console.log(err);
-  });
-
-// TODO: parse html dom
 var htmlparser = require("htmlparser2");
+
+// parser
 var parser = new htmlparser.Parser(
   {
-    onopentag: function(name, attribs) {
-      if (name === "script" && attribs.type === "text/javascript") {
-        console.log("JS! Hooray!");
-      }
-    },
     ontext: function(text) {
-      console.log("-->", text);
-    },
-    onclosetag: function(tagname) {
-      if (tagname === "script") {
-        console.log("That's it?!");
+      if (text.includes("google-analytics.com/analytics.js")) {
+        console.log("This site has Google Analytics");
       }
     }
   },
   { decodeEntities: true }
 );
-// insert entire dom here
-parser.write(head);
-parser.end();
+
+var input;
+/*** Get Command Line Args ***/
+(async function() {
+  let questions = [
+    {
+      type: "text",
+      name: "site",
+      message: "What site would you like to check?"
+    }
+  ];
+
+  let response = await prompts(questions);
+  return response;
+})();
+
+input = getArgs();
+site = input.site;
+
+/*** Connect to Site ***/
+axios
+  .get(site)
+  .then(({ data }) => {
+    // format site data
+    const $ = cheerio.load(data);
+    var html = $.html();
+    /*** Parse Html ***/
+    parser.write(html);
+    parser.end();
+  })
+  .catch(console.error);

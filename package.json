@@ -21,10 +21,10 @@
   },
   "homepage": "https://github.com/sodiumhalogenteam/litmus-lab#readme",
   "dependencies": {
+    "axios": "^0.18.0",
     "cheerio": "^1.0.0-rc.2",
     "htmlparser2": "^3.10.0",
     "minimist": "^1.2.0",
-    "request": "^2.88.0",
-    "request-promise": "^4.2.2"
+    "prompts": "^1.2.1"
   }
 }
