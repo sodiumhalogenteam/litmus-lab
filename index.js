@@ -16,33 +16,29 @@ var parser = new htmlparser.Parser(
   { decodeEntities: true }
 );
 
-var input;
-/*** Get Command Line Args ***/
-(async function() {
-  let questions = [
-    {
-      type: "text",
-      name: "site",
-      message: "What site would you like to check?"
-    }
-  ];
+const testSite = site => {
+  return axios
+    .get(site)
+    .then(({ data }) => {
+      // format site data
+      const $ = cheerio.load(data);
+      var html = $.html();
+      /*** Parse Html ***/
+      parser.write(html);
+      parser.end();
+    })
+    .catch(console.error);
+};
 
-  let response = await prompts(questions);
-  return response;
-})();
+const main = async () => {
+  const result = await prompts({
+    type: "text",
+    name: "site",
+    message: "What site would you like to check?"
+  });
+  const site = result.site;
 
-input = getArgs();
-site = input.site;
-
-/*** Connect to Site ***/
-axios
-  .get(site)
-  .then(({ data }) => {
-    // format site data
-    const $ = cheerio.load(data);
-    var html = $.html();
-    /*** Parse Html ***/
-    parser.write(html);
-    parser.end();
-  })
-  .catch(console.error);
+  /*** Connect to Site ***/
+  await testSite(site);
+};
+main();
