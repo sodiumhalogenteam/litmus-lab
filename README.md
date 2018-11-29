@@ -14,3 +14,4 @@ A site checker that tests elements of your live website as needed.
 - [ ] check other pages on the site
 - [ ] test multiple urls?
 - [ ] add custom scripts \$`litmus-lab sodiumhalogen.com --script=./custom-tests.js`
+   - [ ] test monthly form submission confirmation (customer gets monthly contact form submission test)
