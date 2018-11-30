@@ -4,13 +4,69 @@ import cheerio from "cheerio";
 import htmlparser from "htmlparser2";
 import yargsParser from "yargs-parser";
 
-// parser
-var parser = new htmlparser.Parser(
+var site;
+var linkArr = [];
+
+// format links for 404 checking
+function formatLink(link) {
+  if (link.startsWith("/") || link.startsWith("./")) {
+    link = site + link;
+  } else if (
+    !link.includes(site) &&
+    !link.startsWith("http") &&
+    !link.startsWith("www")
+  ) {
+    link = site + "/" + link;
+  }
+  return link;
+}
+
+// check if links are website links or not
+function isLink(link) {
+  if (link[0] == "#") return 0;
+  if (link.startsWith("mailto")) return 0;
+  if (link.startsWith("tel")) return 0;
+  if (link === "") return 0;
+  return 1;
+}
+
+// google analytics parser
+var analyticsparser = new htmlparser.Parser(
   {
     ontext: function(text) {
       // check for google analytics
       if (text.includes("google-analytics.com/analytics.js")) {
         console.log("This site has Google Analytics");
+      }
+    }
+  },
+  { decodeEntities: true }
+);
+
+// 404 link checking parser
+var linkparser = new htmlparser.Parser(
+  {
+    onopentag: function(name, attribs) {
+      if (name === "link" && attribs.href) {
+        var link = attribs.href;
+        if (!isLink(link)) return;
+        link = formatLink(link);
+        linkArr.push(link);
+      } else if (name === "script" && attribs.src) {
+        var link = attribs.src;
+        if (!isLink(link)) return;
+        link = formatLink(link);
+        linkArr.push(link);
+      } else if (name === "a" && attribs.href) {
+        var link = attribs.href;
+        if (!isLink(link)) return;
+        link = formatLink(link);
+        linkArr.push(link);
+      } else if (name === "img" && attribs.src) {
+        var link = attribs.src;
+        if (!isLink(link)) return;
+        link = formatLink(link);
+        linkArr.push(link);
       }
     }
   },
@@ -23,20 +79,28 @@ const validateURI = site => {
 };
 
 // get site html and load it into cheerio, then parser
-const testSite = (site, sitemap) => {
+// args: <site url>, <scraping mode>
+/*
+scrapping modes:
+  0: google analytics
+  1: check for 404
+*/
+const testSite = (site, mode) => {
   return axios
     .get(site)
     .then(({ data }) => {
-      if (sitemap) return 1;
+      if (mode == 1) return 1;
       // format site data
       const $ = cheerio.load(data);
       var html = $.html();
-      /*** Parse Html ***/
-      parser.write(html);
-      parser.end();
+      // check for google analytics
+      analyticsparser.write(html);
+      analyticsparser.end();
+      linkparser.write(html);
+      linkparser.end();
     })
     .catch(function error() {
-      if (sitemap) return 0;
+      if (mode == 1) return 0;
       else console.log(error);
     });
 };
@@ -44,7 +108,7 @@ const testSite = (site, sitemap) => {
 // get command line args; useful for multiple sites
 var argv = yargsParser.parse(process.argv.slice(2));
 // website name (get from cmd line option -s)
-var site = argv.s;
+var batchSites = argv.s;
 
 const main = async () => {
   const result = await prompts({
@@ -54,19 +118,31 @@ const main = async () => {
     message: "What site would you like to check?"
   });
 
-  const site = await validateURI(result.site);
+  site = await validateURI(result.site);
 
   // test for google analytics
   await testSite(site, 0);
 
   // check for sitemap
   const sitemapUrl = site + "/sitemap.xml";
-  /*** Connect to Site ***/
   var sitemap = await testSite(sitemapUrl, 1);
   if (!sitemap) {
     console.log("A sitemap does not exist for this site");
   } else {
     console.log("A sitemap does exist for this site");
+  }
+
+  // check 404 link errors
+  var badLinks = 0;
+  for (var i = 0; i < linkArr.length; i++) {
+    var goodLink = await testSite(linkArr[i], 1);
+    if (!goodLink) {
+      badLinks = 1;
+      console.log(linkArr[i], "leads to a 404");
+    }
+  }
+  if (!badLinks) {
+    console.log("No 404 links were found");
   }
 };
 main();
