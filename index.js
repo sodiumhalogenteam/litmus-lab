@@ -10,8 +10,6 @@ var parser = new htmlparser.Parser(
       // check for google analytics
       if (text.includes("google-analytics.com/analytics.js")) {
         console.log("This site has Google Analytics");
-      } else {
-        console.log("This site does not have Google Analytics");
       }
     }
   },
@@ -24,19 +22,22 @@ const validateURI = site => {
 };
 
 // get site html and load it into cheerio, then parser
-const testSite = site => {
+const testSite = (site, sitemap) => {
   return axios
     .get(site)
     .then(({ data }) => {
+      if (sitemap) return 1;
       // format site data
       const $ = cheerio.load(data);
       var html = $.html();
-      // console.log(html);
       /*** Parse Html ***/
       parser.write(html);
       parser.end();
     })
-    .catch(console.error);
+    .catch(function error() {
+      if (sitemap) return 0;
+      else console.log(error);
+    });
 };
 
 // get command line args; useful for multiple sites
@@ -54,7 +55,17 @@ const main = async () => {
 
   const site = await validateURI(result.site);
 
+  // test for google analytics
+  await testSite(site, 0);
+
+  // check for sitemap
+  const sitemapUrl = site + "/sitemap.xml";
   /*** Connect to Site ***/
-  await testSite(site);
+  var sitemap = await testSite(sitemapUrl, 1);
+  if (!sitemap) {
+    console.log("A sitemap does not exist for this site");
+  } else {
+    console.log("A sitemap does exist for this site");
+  }
 };
 main();
