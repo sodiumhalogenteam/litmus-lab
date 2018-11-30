@@ -2,13 +2,13 @@
   "name": "litmus-lab",
   "version": "0.1.6",
   "description": "litmus-lab dependencies",
-  "main": "index.js",
   "bin": {
     "litmus-lab": "index.js"
   },
   "scripts": {
     "test": "test",
-    "patch-release": "npm version patch && npm publish && git push --follow-tags"
+    "patch-release": "npm version patch && npm publish && git push --follow-tags",
+    "build": "webpack src/index.js dist/main.js"
   },
   "repository": {
     "type": "git",
@@ -27,8 +27,7 @@
     "prompts": "^1.2.1",
     "yargs-parser": "^11.1.1"
   },
-  "contributors": [
-    {
+  "contributors": [{
       "name": "Adam Curl",
       "email": "adam@sodiumhalogen.com",
       "url": "http://github.com/adamcurl"
@@ -43,5 +42,9 @@
       "email": "chance@sodiumhalogen.com",
       "url": "http://github.com/chancesmith"
     }
-  ]
+  ],
+  "devDependencies": {
+    "webpack": "^4.26.1",
+    "webpack-cli": "^3.1.2"
+  }
 }

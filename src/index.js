@@ -1,7 +1,8 @@
-const prompts = require("prompts");
-const axios = require("axios");
-const cheerio = require("cheerio");
-var htmlparser = require("htmlparser2");
+import prompts from "prompts";
+import axios from "axios";
+import cheerio from "cheerio";
+import htmlparser from "htmlparser2";
+import yargsParser from "yargs-parser";
 
 // parser
 var parser = new htmlparser.Parser(
@@ -41,7 +42,7 @@ const testSite = (site, sitemap) => {
 };
 
 // get command line args; useful for multiple sites
-var argv = require("yargs-parser")(process.argv.slice(2));
+var argv = yargsParser.parse(process.argv.slice(2));
 // website name (get from cmd line option -s)
 var site = argv.s;
 
