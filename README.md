@@ -7,7 +7,7 @@ A site checker that tests elements of your live website as needed.
 - [x] sitemap exists
 - [x] google analytics is added
 - [ ] check for `<meta name="robots" content="nofollow" />` not present
-- [ ] any 404s in console? (missing files)
+- [x] any 404s in console? (missing files)
 
 ## future ideas:
 
