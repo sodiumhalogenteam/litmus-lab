@@ -75,7 +75,7 @@ var linkparser = new htmlparser.Parser(
 );
 
 // check for http
-const validateURI = site => {
+const tidyURI = site => {
   return site.includes("http://") ? site : "http://" + site;
 };
 
@@ -112,14 +112,18 @@ var argv = require("yargs-parser")(process.argv.slice(2));
 var batchSites = argv.s;
 
 const main = async () => {
-  const result = await prompts({
-    type: "text",
-    name: "site",
-    initial: "sodiumhalogen.com",
-    message: "What site would you like to check?"
-  });
+  site = argv.s;
+  if (!site) {
+    result = await prompts({
+      type: "text",
+      name: "site",
+      initial: "sodiumhalogen.com",
+      message: "What site would you like to check?"
+    });
+    site = result.site;
+  }
 
-  site = await validateURI(result.site);
+  site = await tidyURI(site);
 
   // test for google analytics
   await testSite(site, 0);
