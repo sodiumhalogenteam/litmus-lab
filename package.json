@@ -7,12 +7,9 @@
     "litmus-lab": "index.js"
   },
   "scripts": {
-    "test": "test",
     "patch-release": "npm version patch && npm publish && git push --follow-tags",
     "test": "jest --coverage",
-    "test:watch": "jest --watch",
-    "precommit": "npm test",
-    "prepush": "npm test"
+    "test:watch": "jest --watch"
   },
   "repository": {
     "type": "git",
@@ -62,6 +59,12 @@
       "global": {
         "functions": 0
       }
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm test",
+      "pre-push": "npm test"
     }
   }
 }
