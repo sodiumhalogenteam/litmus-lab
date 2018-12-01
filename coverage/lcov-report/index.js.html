@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for index.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="prettify.css" />
+    <link rel="stylesheet" href="base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="index.html">All files</a> index.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">19.28% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>16/83</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">3.64% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>2/55</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">22.22% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>2/9</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">21.92% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>16/73</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">#!/usr/bin/env node
+&nbsp;
+const prompts = require("prompts");
+const axios = require("axios");
+const cheerio = require("cheerio");
+var htmlparser = require("htmlparser2");
+&nbsp;
+var site;
+var linkArr = [];
+&nbsp;
+// format links for 404 checking
+function <span class="fstat-no" title="function not covered" >formatLink(</span>link) {
+<span class="cstat-no" title="statement not covered" >  if (link.startsWith("/") || link.startsWith("./")) {</span>
+<span class="cstat-no" title="statement not covered" >    link = site + link;</span>
+  } else <span class="cstat-no" title="statement not covered" >if (</span>
+    !link.includes(site) &amp;&amp;
+    !link.startsWith("http") &amp;&amp;
+    !link.startsWith("www")
+  ) {
+<span class="cstat-no" title="statement not covered" >    link = site + "/" + link;</span>
+  }
+<span class="cstat-no" title="statement not covered" >  return link;</span>
+}
+&nbsp;
+// check if links are website links or not
+function <span class="fstat-no" title="function not covered" >isLink(</span>link) {
+<span class="cstat-no" title="statement not covered" >  if (link[0] == "#") <span class="cstat-no" title="statement not covered" >return 0;</span></span>
+<span class="cstat-no" title="statement not covered" >  if (link.startsWith("mailto")) <span class="cstat-no" title="statement not covered" >return 0;</span></span>
+<span class="cstat-no" title="statement not covered" >  if (link.startsWith("tel")) <span class="cstat-no" title="statement not covered" >return 0;</span></span>
+<span class="cstat-no" title="statement not covered" >  if (link === "") <span class="cstat-no" title="statement not covered" >return 0;</span></span>
+<span class="cstat-no" title="statement not covered" >  return 1;</span>
+}
+&nbsp;
+// google analytics parser
+var analyticsparser = new htmlparser.Parser(
+  {
+    ontext: <span class="fstat-no" title="function not covered" >fu</span>nction(text) {
+      // check for google analytics
+<span class="cstat-no" title="statement not covered" >      if (text.includes("google-analytics.com/analytics.js")) {</span>
+<span class="cstat-no" title="statement not covered" >        console.log("This site has Google Analytics");</span>
+      }
+    }
+  },
+  { decodeEntities: true }
+);
+&nbsp;
+// 404 link checking parser
+var linkparser = new htmlparser.Parser(
+  {
+    onopentag: <span class="fstat-no" title="function not covered" >fu</span>nction(name, attribs) {
+<span class="cstat-no" title="statement not covered" >      if (name === "link" &amp;&amp; attribs.href) {</span>
+        var link = <span class="cstat-no" title="statement not covered" >attribs.href;</span>
+<span class="cstat-no" title="statement not covered" >        if (!isLink(link)) <span class="cstat-no" title="statement not covered" >return;</span></span>
+<span class="cstat-no" title="statement not covered" >        link = formatLink(link);</span>
+<span class="cstat-no" title="statement not covered" >        linkArr.push(link);</span>
+      } else <span class="cstat-no" title="statement not covered" >if (name === "script" &amp;&amp; attribs.src) {</span>
+        var link = <span class="cstat-no" title="statement not covered" >attribs.src;</span>
+<span class="cstat-no" title="statement not covered" >        if (!isLink(link)) <span class="cstat-no" title="statement not covered" >return;</span></span>
+<span class="cstat-no" title="statement not covered" >        link = formatLink(link);</span>
+<span class="cstat-no" title="statement not covered" >        linkArr.push(link);</span>
+      } else <span class="cstat-no" title="statement not covered" >if (name === "a" &amp;&amp; attribs.href) {</span>
+        var link = <span class="cstat-no" title="statement not covered" >attribs.href;</span>
+<span class="cstat-no" title="statement not covered" >        if (!isLink(link)) <span class="cstat-no" title="statement not covered" >return;</span></span>
+<span class="cstat-no" title="statement not covered" >        link = formatLink(link);</span>
+<span class="cstat-no" title="statement not covered" >        linkArr.push(link);</span>
+      } else <span class="cstat-no" title="statement not covered" >if (name === "img" &amp;&amp; attribs.src) {</span>
+        var link = <span class="cstat-no" title="statement not covered" >attribs.src;</span>
+<span class="cstat-no" title="statement not covered" >        if (!isLink(link)) <span class="cstat-no" title="statement not covered" >return;</span></span>
+<span class="cstat-no" title="statement not covered" >        link = formatLink(link);</span>
+<span class="cstat-no" title="statement not covered" >        linkArr.push(link);</span>
+      }
+    }
+  },
+  { decodeEntities: true }
+);
+&nbsp;
+// check for http
+const validateURI = site =&gt; {
+  return site.includes("http://") ? site : "http://" + site;
+};
+module.exports = validateURI;
+&nbsp;
+// get site html and load it into cheerio, then parser
+// args: &lt;site url&gt;, &lt;scraping mode&gt;
+/*
+scrapping modes:
+  0: google analytics
+  1: check for 404
+*/
+const testSite = <span class="fstat-no" title="function not covered" >(s</span>ite, mode) =&gt; {
+<span class="cstat-no" title="statement not covered" >  return axios</span>
+    .get(site)
+    .then(<span class="fstat-no" title="function not covered" >({</span> data }) =&gt; {
+<span class="cstat-no" title="statement not covered" >      if (mode == 1) <span class="cstat-no" title="statement not covered" >return 1;</span></span>
+      // format site data
+      const $ = <span class="cstat-no" title="statement not covered" >cheerio.load(data);</span>
+      var html = <span class="cstat-no" title="statement not covered" >$.html();</span>
+      // check for google analytics
+<span class="cstat-no" title="statement not covered" >      analyticsparser.write(html);</span>
+<span class="cstat-no" title="statement not covered" >      analyticsparser.end();</span>
+<span class="cstat-no" title="statement not covered" >      linkparser.write(html);</span>
+<span class="cstat-no" title="statement not covered" >      linkparser.end();</span>
+    })
+    .catch(function <span class="fstat-no" title="function not covered" >error(</span>) {
+<span class="cstat-no" title="statement not covered" >      if (mode == 1) <span class="cstat-no" title="statement not covered" >return 0;</span></span>
+      else <span class="cstat-no" title="statement not covered" >console.log(error);</span>
+    });
+};
+&nbsp;
+// get command line args; useful for multiple sites
+var argv = require("yargs-parser")(process.argv.slice(2));
+// website name (get from cmd line option -s)
+var batchSites = argv.s;
+&nbsp;
+const main = async () =&gt; {
+  const result = await prompts({
+    type: "text",
+    name: "site",
+    initial: "sodiumhalogen.com",
+    message: "What site would you like to check?"
+  });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  site = await validateURI(result.site);</span>
+&nbsp;
+  // test for google analytics
+<span class="cstat-no" title="statement not covered" >  await testSite(site, 0);</span>
+&nbsp;
+  // check for sitemap
+  const sitemapUrl = <span class="cstat-no" title="statement not covered" >site + "/sitemap.xml";</span>
+  var sitemap = <span class="cstat-no" title="statement not covered" >await testSite(sitemapUrl, 1);</span>
+<span class="cstat-no" title="statement not covered" >  if (!sitemap) {</span>
+<span class="cstat-no" title="statement not covered" >    console.log("A sitemap does not exist for this site");</span>
+  } else {
+<span class="cstat-no" title="statement not covered" >    console.log("A sitemap does exist for this site");</span>
+  }
+&nbsp;
+  // check 404 link errors
+  var badLinks = <span class="cstat-no" title="statement not covered" >0;</span>
+<span class="cstat-no" title="statement not covered" >  for (var i = 0; i &lt; linkArr.length; i++) {</span>
+    var goodLink = <span class="cstat-no" title="statement not covered" >await testSite(linkArr[i], 1);</span>
+<span class="cstat-no" title="statement not covered" >    if (!goodLink) {</span>
+<span class="cstat-no" title="statement not covered" >      badLinks = 1;</span>
+<span class="cstat-no" title="statement not covered" >      console.log(linkArr[i], "leads to a 404");</span>
+    }
+  }
+<span class="cstat-no" title="statement not covered" >  if (!badLinks) {</span>
+<span class="cstat-no" title="statement not covered" >    console.log("No 404 links were found");</span>
+  }
+};
+main();
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Nov 30 2018 23:45:27 GMT-0600 (Central Standard Time)
+</div>
+</div>
+<script src="prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="sorter.js"></script>
+</body>
+</html>
