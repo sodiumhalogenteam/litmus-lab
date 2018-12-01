@@ -2,12 +2,17 @@
 
 A site checker that tests elements of your live website as needed.
 
-## tests:
+## get to testing 🚀
+
+- run \$`npx litmus-lab -s sodiumhalogen.com`
+- or intall globally \$`npm i -g litmus-lab`
+
+## tests available:
 
 - [x] sitemap exists
 - [x] google analytics is added
-- [ ] check for `<meta name="robots" content="nofollow" />` not present
 - [x] any 404s in console? (missing files)
+- [ ] check for `<meta name="robots" content="nofollow" />` not present
 
 ## future ideas:
 
