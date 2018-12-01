@@ -78,6 +78,7 @@ var linkparser = new htmlparser.Parser(
 const validateURI = site => {
   return site.includes("http://") ? site : "http://" + site;
 };
+module.exports = validateURI;
 
 // get site html and load it into cheerio, then parser
 // args: <site url>, <scraping mode>
