@@ -3,13 +3,19 @@
 const prompts = require("prompts");
 const axios = require("axios");
 const cheerio = require("cheerio");
-var htmlparser = require("htmlparser2");
+let htmlparser = require("htmlparser2");
 
-var site;
-var linkArr = [];
+// palette
+const colors = { red: "\x1b[31m", green: "\x1b[32m", white: "\x1b[37m" };
+
+let site;
+let linkArr = [];
+
+// tests
+let isAnalyticsFound = false;
 
 // format links for 404 checking
-function formatLink(link) {
+const formatLink = link => {
   if (link.startsWith("/") || link.startsWith("./")) {
     link = site + link;
   } else if (
@@ -20,7 +26,7 @@ function formatLink(link) {
     link = site + "/" + link;
   }
   return link;
-}
+};
 
 // check if links are website links or not
 function isLink(link) {
@@ -32,12 +38,18 @@ function isLink(link) {
 }
 
 // google analytics parser
-var analyticsparser = new htmlparser.Parser(
+let analyticsparser = new htmlparser.Parser(
   {
     ontext: function(text) {
       // check for google analytics
       if (text.includes("google-analytics.com/analytics.js")) {
-        console.log("This site has Google Analytics");
+        console.log(
+          colors.green,
+          "✓",
+          colors.white,
+          "This site has Google Analytics"
+        );
+        isAnalyticsFound = true;
       }
     }
   },
@@ -45,26 +57,26 @@ var analyticsparser = new htmlparser.Parser(
 );
 
 // 404 link checking parser
-var linkparser = new htmlparser.Parser(
+let linkparser = new htmlparser.Parser(
   {
     onopentag: function(name, attribs) {
       if (name === "link" && attribs.href) {
-        var link = attribs.href;
+        let link = attribs.href;
         if (!isLink(link)) return;
         link = formatLink(link);
         linkArr.push(link);
       } else if (name === "script" && attribs.src) {
-        var link = attribs.src;
+        let link = attribs.src;
         if (!isLink(link)) return;
         link = formatLink(link);
         linkArr.push(link);
       } else if (name === "a" && attribs.href) {
-        var link = attribs.href;
+        let link = attribs.href;
         if (!isLink(link)) return;
         link = formatLink(link);
         linkArr.push(link);
       } else if (name === "img" && attribs.src) {
-        var link = attribs.src;
+        let link = attribs.src;
         if (!isLink(link)) return;
         link = formatLink(link);
         linkArr.push(link);
@@ -93,10 +105,19 @@ const testSite = (site, mode) => {
       if (mode == 1) return 1;
       // format site data
       const $ = cheerio.load(data);
-      var html = $.html();
+      let html = $.html();
+
       // check for google analytics
       analyticsparser.write(html);
       analyticsparser.end();
+      if (!isAnalyticsFound)
+        console.error(
+          colors.red,
+          "✕",
+          colors.white,
+          "Google Analytics not found"
+        );
+
       linkparser.write(html);
       linkparser.end();
     })
@@ -107,9 +128,9 @@ const testSite = (site, mode) => {
 };
 
 // get command line args; useful for multiple sites
-var argv = require("yargs-parser")(process.argv.slice(2));
+let argv = require("yargs-parser")(process.argv.slice(2));
 // website name (get from cmd line option -s)
-var batchSites = argv.s;
+let batchSites = argv.s;
 
 const main = async () => {
   const result = await prompts({
@@ -126,24 +147,34 @@ const main = async () => {
 
   // check for sitemap
   const sitemapUrl = site + "/sitemap.xml";
-  var sitemap = await testSite(sitemapUrl, 1);
+  let sitemap = await testSite(sitemapUrl, 1);
   if (!sitemap) {
-    console.log("A sitemap does not exist for this site");
+    console.log(
+      colors.red,
+      "✕",
+      colors.white,
+      "A sitemap doesn't exist for this site"
+    );
   } else {
-    console.log("A sitemap does exist for this site");
+    console.log(
+      colors.green,
+      "✕",
+      colors.white,
+      "A sitemap exists for this site"
+    );
   }
 
   // check 404 link errors
-  var badLinks = 0;
-  for (var i = 0; i < linkArr.length; i++) {
-    var goodLink = await testSite(linkArr[i], 1);
+  let badLinks = 0;
+  for (let i = 0; i < linkArr.length; i++) {
+    let goodLink = await testSite(linkArr[i], 1);
     if (!goodLink) {
       badLinks = 1;
-      console.log(linkArr[i], "leads to a 404");
+      console.log(colors.red, "✕", colors.white, linkArr[i], "leads to a 404");
     }
   }
   if (!badLinks) {
-    console.log("No 404 links were found");
+    console.log(colors.green, "✓", colors.white, "No 404 links found");
   }
 };
 main();
