@@ -1,1 +1,0 @@
-test("Jest is working", () => {});
