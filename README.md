@@ -1,6 +1,10 @@
 # Litmus Lab
 
+[![litmus-lab npm version](https://img.shields.io/npm/v/litmus-lab.svg)](https://npmjs.org/package/litmus-lab)
+
 A site checker that tests elements of your live website as needed.
+
+![litmus-lab example](https://sh-drop.s3.us-east-1.amazonaws.com/cs/litmus-lab-example.png)
 
 ## get to testing 🚀
 
