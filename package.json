@@ -1,8 +1,14 @@
 {
   "name": "litmus-lab",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "litmus-lab dependencies",
-  "keywords": ["site checker", "CLI", "test website", "check analytics", "check sitemap"],
+  "keywords": [
+    "site checker",
+    "CLI",
+    "test website",
+    "check analytics",
+    "check sitemap"
+  ],
   "main": "index.js",
   "bin": {
     "litmus-lab": "index.js"
@@ -28,7 +34,8 @@
     "prompts": "^1.2.1",
     "yargs-parser": "^11.1.1"
   },
-  "contributors": [{
+  "contributors": [
+    {
       "name": "Adam Curl",
       "email": "adam@sodiumhalogen.com",
       "url": "http://github.com/adamcurl"
