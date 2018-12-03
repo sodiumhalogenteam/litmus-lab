@@ -2,14 +2,14 @@
 
 [![litmus-lab npm version](https://img.shields.io/npm/v/litmus-lab.svg)](https://npmjs.org/package/litmus-lab)
 
-A site checker that tests elements of your live website as needed.
+A site checker that tests elements of a website.
 
 ![litmus-lab example](https://sh-drop.s3.us-east-1.amazonaws.com/cs/litmus-lab-example.png)
 
 ## get to testing 🚀
 
 - run \$`npx litmus-lab -s sodiumhalogen.com`
-- or intall globally \$`npm i -g litmus-lab`
+- or install globally \$`npm i -g litmus-lab`
 
 ## tests available:
 
