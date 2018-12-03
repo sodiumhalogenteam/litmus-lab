@@ -20,8 +20,8 @@ A site checker that tests elements of a website.
 
 ## future ideas:
 
-- [ ] check other pages on the site
 - [ ] test multiple urls?
+- [ ] check other pages on the site (check links/imgs)
 - [ ] add custom scripts \$`litmus-lab sodiumhalogen.com --script=./custom-tests.js`
 - [ ] test monthly form submission confirmation (customer gets monthly contact form submission test)
 - [ ] (custom script example) test monthly form submission confirmation (customer gets monthly contact form submission test)
