@@ -3,7 +3,10 @@
 const prompts = require("prompts");
 const axios = require("axios");
 const cheerio = require("cheerio");
-let htmlparser = require("htmlparser2");
+const { exec } = require("child_process");
+var htmlparser = require("htmlparser2");
+
+var pjson = require("./package.json");
 
 // palette
 const colors = { red: "\x1b[31m", green: "\x1b[32m", white: "\x1b[37m" };
@@ -13,6 +16,31 @@ let linkArr = [];
 
 // tests
 let isAnalyticsFound = false;
+
+// check user's global version
+const checkVersion = () => {
+  // TODO: add version tag - Chance 12/9/18 https://github.com/sodiumhalogenteam/litmus-lab/issues/7
+  // let islitmusLabFound = false;
+  // check if litmus-lab is installed
+  // exec("litmus-lab --verison", function(err, stdout, stderr) {
+  //   islitmusLabFound = !stdout.includes("command not found");
+  // });
+
+  // if (islitmusLabFound) {
+  exec("npm show litmus-lab version", function(err, stdout, stderr) {
+    const local = pjson.version.trim();
+    const npm = stdout.trim().toString("utf8");
+    // only check major and minor versioning
+    if (local.slice(0, -1) != npm.slice(0, -1))
+      console.log(
+        `\x1b[32m`, // green
+        `😎  Litmus-Lab update available: ${stdout}`,
+        "\x1b[37m", // white
+        `run $ npm update i -g litmus-lab`
+      );
+  });
+  // }
+};
 
 // format links for 404 checking
 const formatLink = link => {
@@ -87,7 +115,7 @@ let linkparser = new htmlparser.Parser(
 );
 
 // check for http
-const validateURI = site => {
+const tidyURI = site => {
   return site.includes("http://") ? site : "http://" + site;
 };
 
@@ -133,14 +161,18 @@ let argv = require("yargs-parser")(process.argv.slice(2));
 let batchSites = argv.s;
 
 const main = async () => {
-  const result = await prompts({
-    type: "text",
-    name: "site",
-    initial: "sodiumhalogen.com",
-    message: "What site would you like to check?"
-  });
+  site = argv.s;
+  if (!site) {
+    result = await prompts({
+      type: "text",
+      name: "site",
+      initial: "sodiumhalogen.com",
+      message: "What site would you like to check?"
+    });
+    site = result.site;
+  }
 
-  site = await validateURI(result.site);
+  site = await tidyURI(site);
 
   // test for google analytics
   await testSite(site, 0);
@@ -176,5 +208,7 @@ const main = async () => {
   if (!badLinks) {
     console.log(colors.green, "✓", colors.white, "No 404 links found");
   }
+
+  checkVersion();
 };
 main();

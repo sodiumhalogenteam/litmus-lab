@@ -1,14 +1,23 @@
 {
   "name": "litmus-lab",
-  "version": "0.1.8",
+  "version": "0.1.11",
   "description": "litmus-lab dependencies",
+  "keywords": [
+    "site checker",
+    "CLI",
+    "test website",
+    "check analytics",
+    "check sitemap"
+  ],
   "main": "index.js",
   "bin": {
     "litmus-lab": "index.js"
   },
   "scripts": {
     "test": "test",
-    "patch-release": "npm version patch && npm publish && git push --follow-tags"
+    "patch-release": "npm version patch && npm publish && git push --follow-tags",
+    "minor-release": "npm version minor && npm publish && git push --follow-tags",
+    "major-release": "npm version major && npm publish && git push --follow-tags"
   },
   "repository": {
     "type": "git",
@@ -23,6 +32,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "cheerio": "^1.0.0-rc.2",
+    "commander": "^2.19.0",
     "htmlparser2": "^3.10.0",
     "prompts": "^1.2.1",
     "yargs-parser": "^11.1.1"
