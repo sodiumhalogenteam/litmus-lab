@@ -65,7 +65,7 @@ var analyticsparser = new htmlparser.Parser(
     ontext: function(text) {
       // check for google analytics
       if (text.includes("google-analytics.com/analytics.js")) {
-        console.log("This site has Google Analytics");
+        console.log(site, "has Google Analytics");
       }
     }
   },
@@ -160,9 +160,9 @@ const main = async () => {
   const sitemapUrl = site + "/sitemap.xml";
   var sitemap = await testSite(sitemapUrl, 1);
   if (!sitemap) {
-    console.log("A sitemap does not exist for this site");
+    console.log("A sitemap does not exist for", site);
   } else {
-    console.log("A sitemap does exist for this site");
+    console.log("A sitemap does exist for", site);
   }
 
   // check 404 link errors
@@ -175,7 +175,7 @@ const main = async () => {
     }
   }
   if (!badLinks) {
-    console.log("No 404 links were found");
+    console.log("No 404 links were found on", site);
   }
 
   checkVersion();
