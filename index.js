@@ -144,7 +144,8 @@ const testSite = (site, mode) => {
           colors.red,
           "✕",
           colors.white,
-          "Google Analytics not found"
+          site,
+          "does not have Google Analytics"
         );
 
       linkparser.write(html);
@@ -192,7 +193,7 @@ const main = async () => {
   } else {
     console.log(
       colors.green,
-      "✕",
+      "✓",
       colors.white,
       "A sitemap does exist for",
       site
