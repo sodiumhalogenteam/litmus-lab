@@ -13,7 +13,7 @@ var linkArr = [];
 
 // check user's global version
 const checkVersion = () => {
-  // TODO: add version tag - Chance 12/9/18 https://github.com/sodiumhalogenteam/litmus-lab/issues/6
+  // TODO: add version tag - Chance 12/9/18 https://github.com/sodiumhalogenteam/litmus-lab/issues/7
   // let islitmusLabFound = false;
   // check if litmus-lab is installed
   // exec("litmus-lab --verison", function(err, stdout, stderr) {
