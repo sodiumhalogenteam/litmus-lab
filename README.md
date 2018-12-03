@@ -24,3 +24,5 @@ A site checker that tests elements of a website.
 - [ ] test multiple urls?
 - [ ] add custom scripts \$`litmus-lab sodiumhalogen.com --script=./custom-tests.js`
 - [ ] test monthly form submission confirmation (customer gets monthly contact form submission test)
+- [ ] (custom script example) test monthly form submission confirmation (customer gets monthly contact form submission test)
+- [ ] update Slack of failures \$`litmus-lab -s sodiumhalogen.com --slack HOOK_URL`
