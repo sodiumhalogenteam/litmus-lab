@@ -138,7 +138,7 @@ let nofollowparser = new htmlparser.Parser(
         attribs.name === "robots" &&
         attribs.content === "nofollow"
       ) {
-        console.log(colors.red, "✕", colors.white, site, "has a no follow tag");
+        console.log(colors.red, "✕", colors.white, site, "has a nofollow tag");
         noFollowFound = true;
       }
     }
@@ -191,7 +191,7 @@ const testSite = (site, mode) => {
           "✓",
           colors.white,
           site,
-          "does not have a no follow tag"
+          "does not have a nofollow tag"
         );
     })
     .catch(function error() {
