@@ -80,6 +80,19 @@ let analyticsparser = new htmlparser.Parser(
         );
         isAnalyticsFound = true;
       }
+    },
+    onopentag: function(name, attribs) {
+      if (!attribs.src) return;
+      if (name === "script" && attribs.src.includes("googletagmanager")) {
+        console.log(
+          colors.green,
+          "✓",
+          colors.white,
+          site,
+          "has Google Analytics"
+        );
+        isAnalyticsFound = true;
+      }
     }
   },
   { decodeEntities: true }
