@@ -16,6 +16,7 @@ let linkArr = [];
 
 // tests
 let isAnalyticsFound = false;
+let noFollowFound = false;
 
 // check user's global version
 const checkVersion = () => {
@@ -128,6 +129,23 @@ let linkparser = new htmlparser.Parser(
   { decodeEntities: true }
 );
 
+let nofollowparser = new htmlparser.Parser(
+  {
+    onopentag: function(name, attribs) {
+      if (!attribs.name || !attribs.content) return;
+      if (
+        name === "meta" &&
+        attribs.name === "robots" &&
+        attribs.content === "nofollow"
+      ) {
+        console.log(colors.red, "✕", colors.white, site, "has a no follow tag");
+        noFollowFound = true;
+      }
+    }
+  },
+  { decodeEntities: true }
+);
+
 // check for http
 const tidyURI = site => {
   return site.includes("http://") ? site : "http://" + site;
@@ -161,8 +179,20 @@ const testSite = (site, mode) => {
           "does not have Google Analytics"
         );
 
+      // check 404 links
       linkparser.write(html);
       linkparser.end();
+      // check for nofollow tag
+      nofollowparser.write(html);
+      nofollowparser.end();
+      if (!noFollowFound)
+        console.error(
+          colors.green,
+          "✓",
+          colors.white,
+          site,
+          "does not have a no follow tag"
+        );
     })
     .catch(function error() {
       if (mode == 1) return 0;

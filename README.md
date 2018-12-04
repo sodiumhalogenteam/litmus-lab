@@ -16,7 +16,7 @@ A site checker that tests elements of a website.
 - [x] sitemap exists
 - [x] google analytics is added
 - [x] any 404s in console? (missing files)
-- [ ] check for `<meta name="robots" content="nofollow" />` not present
+- [x] check for `<meta name="robots" content="nofollow" />` not present
 
 ## future ideas:
 
