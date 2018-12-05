@@ -34,10 +34,11 @@ const checkVersion = () => {
     // only check major and minor versioning
     if (local.slice(0, -1) != npm.slice(0, -1))
       console.log(
-        green,
-        `😎  Litmus-Lab update available: ${stdout}`,
-        white,
-        `run $ npm update i -g litmus-lab`
+        " 😎",
+        colors.green,
+        `Litmus-Lab update available: ${stdout}`,
+        colors.white,
+        `  run $ npm update i -g litmus-lab`
       );
   });
   // }
