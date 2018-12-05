@@ -32,7 +32,7 @@ const checkVersion = () => {
     const local = pjson.version.trim();
     const npm = stdout.trim().toString("utf8");
     // only check major and minor versioning
-    if (local.slice(0, -1) != npm.slice(0, -1))
+    if (local.slice(0, -1) < npm.slice(0, -1))
       console.log(
         " 😎",
         colors.green,
