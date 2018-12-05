@@ -34,9 +34,9 @@ const checkVersion = () => {
     // only check major and minor versioning
     if (local.slice(0, -1) != npm.slice(0, -1))
       console.log(
-        `\x1b[32m`, // green
+        green,
         `😎  Litmus-Lab update available: ${stdout}`,
-        "\x1b[37m", // white
+        white,
         `run $ npm update i -g litmus-lab`
       );
   });
@@ -206,6 +206,10 @@ let argv = require("yargs-parser")(process.argv.slice(2));
 let batchSites = argv.s;
 
 const main = async () => {
+  if (argv.version) {
+    console.log("version", pjson.version);
+    return;
+  }
   site = argv.s;
   if (!site) {
     result = await prompts({
