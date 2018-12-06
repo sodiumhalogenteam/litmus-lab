@@ -7,6 +7,8 @@ const { exec } = require("child_process");
 let htmlparser = require("htmlparser2");
 const tidyURI = require("./src/helpers.js");
 const pjson = require("./package.json");
+let https = require("https");
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
 
 // palette
 const colors = { red: "\x1b[31m", green: "\x1b[32m", white: "\x1b[37m" };
@@ -156,7 +158,11 @@ scrapping modes:
 */
 const testSite = (site, mode) => {
   return axios
-    .get(site)
+    .get(site, {
+      params: {
+        httpsAgent: new https.Agent({ keepAlive: true })
+      }
+    })
     .then(({ data }) => {
       if (mode == 1) return 1;
       // format site data
@@ -190,9 +196,9 @@ const testSite = (site, mode) => {
           "does not have a nofollow tag"
         );
     })
-    .catch(function error() {
+    .catch(function error(e) {
       if (mode == 1) return 0;
-      else console.log(error);
+      else console.log(e);
     });
 };
 
