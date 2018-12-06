@@ -154,7 +154,7 @@ scrapping modes:
   0: google analytics
   1: check for 404
 */
-const testSite = (site, mode) => {
+const testSiteUrl = (site, mode) => {
   return axios
     .get(site)
     .then(({ data }) => {
@@ -196,35 +196,8 @@ const testSite = (site, mode) => {
     });
 };
 
-// get command line args; useful for multiple sites
-let argv = require("yargs-parser")(process.argv.slice(2));
-// website name (get from cmd line option -s)
-let batchSites = argv.s;
-
-const main = async () => {
-  if (argv.version) {
-    console.log("version", pjson.version);
-    return;
-  }
-  site = argv.s;
-  if (!site) {
-    result = await prompts({
-      type: "text",
-      name: "site",
-      initial: "sodiumhalogen.com",
-      message: "What site would you like to check?"
-    });
-    site = result.site;
-  }
-
-  site = await tidyURI(site);
-
-  // test for google analytics
-  await testSite(site, 0);
-
-  // check for sitemap
-  const sitemapUrl = site + "/sitemap.xml";
-  let sitemap = await testSite(sitemapUrl, 1);
+const checkForSitemap = async sitemapUrl => {
+  let sitemap = await testSiteUrl(sitemapUrl, 1);
   if (!sitemap) {
     console.log(
       colors.red,
@@ -242,11 +215,12 @@ const main = async () => {
       site
     );
   }
+};
 
-  // check 404 link errors
+const checkLinks = async () => {
   let badLinks = 0;
   for (let i = 0; i < linkArr.length; i++) {
-    let goodLink = await testSite(linkArr[i], 1);
+    let goodLink = await testSiteUrl(linkArr[i], 1);
     if (!goodLink) {
       badLinks = 1;
       console.log(colors.red, "✕", colors.white, linkArr[i], "leads to a 404");
@@ -261,6 +235,40 @@ const main = async () => {
       site
     );
   }
+};
+
+// get command line args; useful for multiple sites
+let argv = require("yargs-parser")(process.argv.slice(2));
+// website name (get from cmd line option -s)
+// let batchSites = argv.s;
+
+const main = async () => {
+  if (argv.version) {
+    console.log("version", pjson.version);
+    return;
+  }
+  site = argv.s;
+  if (!site) {
+    // prompt user for input
+    result = await prompts({
+      type: "text",
+      name: "site",
+      initial: "sodiumhalogen.com",
+      message: "What site would you like to check?"
+    });
+    site = result.site;
+  }
+
+  site = await tidyURI(site);
+
+  // test for google analytics
+  await testSiteUrl(site, 0);
+
+  // check for sitemap
+  checkForSitemap(site + "/sitemap.xml");
+
+  // check 404 link errors
+  checkLinks();
 
   checkVersion();
 };
