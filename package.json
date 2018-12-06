@@ -14,7 +14,8 @@
     "litmus-lab": "index.js"
   },
   "scripts": {
-    "test": "test",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch",
     "patch-release": "npm version patch && npm publish && git push --follow-tags",
     "minor-release": "npm version minor && npm publish && git push --follow-tags",
     "major-release": "npm version major && npm publish && git push --follow-tags"
@@ -37,8 +38,7 @@
     "prompts": "^1.2.1",
     "yargs-parser": "^11.1.1"
   },
-  "contributors": [
-    {
+  "contributors": [{
       "name": "Adam Curl",
       "email": "adam@sodiumhalogen.com",
       "url": "http://github.com/adamcurl"
@@ -53,5 +53,31 @@
       "email": "chance@sodiumhalogen.com",
       "url": "http://github.com/chancesmith"
     }
-  ]
+  ],
+  "devDependencies": {
+    "husky": "^1.2.0",
+    "jest": "^23.6.0"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "**/*.js"
+    ],
+    "coveragePathIgnorePatterns": [
+      "./node_modules/",
+      "./index.js",
+      "./dist/",
+      "./coverage"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "functions": 0
+      }
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm test",
+      "pre-push": "npm test"
+    }
+  }
 }
