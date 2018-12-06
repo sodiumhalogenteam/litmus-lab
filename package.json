@@ -60,10 +60,13 @@
   },
   "jest": {
     "collectCoverageFrom": [
-      "./src/**/*.js"
+      "**/*.js"
     ],
     "coveragePathIgnorePatterns": [
-      "./node_modules/"
+      "./node_modules/",
+      "./index.js",
+      "./dist/",
+      "./coverage"
     ],
     "coverageThreshold": {
       "global": {
