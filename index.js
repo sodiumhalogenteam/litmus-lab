@@ -149,6 +149,10 @@ let nofollowparser = new htmlparser.Parser(
 
 // get site html and load it into cheerio, then parser
 // args: <site url>, <scraping mode>
+const MODES = {
+  ANALYTICS: 0,
+  CHECK404S: 1
+};
 /*
 scrapping modes:
   0: google analytics
@@ -158,7 +162,7 @@ const testSiteUrl = (site, mode) => {
   return axios
     .get(site)
     .then(({ data }) => {
-      if (mode == 1) return 1;
+      if (mode == MODES.CHECK404S) return 1;
       // format site data
       const $ = cheerio.load(data);
       let html = $.html();
@@ -191,7 +195,7 @@ const testSiteUrl = (site, mode) => {
         );
     })
     .catch(function error() {
-      if (mode == 1) return 0;
+      if (mode == MODES.CHECK404S) return 0;
       else console.log(error);
     });
 };
