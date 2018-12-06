@@ -60,7 +60,7 @@
   },
   "jest": {
     "collectCoverageFrom": [
-      "*.js"
+      "./src/**/*.js"
     ],
     "coveragePathIgnorePatterns": [
       "./node_modules/"

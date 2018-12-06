@@ -4,9 +4,9 @@ const prompts = require("prompts");
 const axios = require("axios");
 const cheerio = require("cheerio");
 const { exec } = require("child_process");
-var htmlparser = require("htmlparser2");
-
-var pjson = require("./package.json");
+let htmlparser = require("htmlparser2");
+const tidyURI = require("./src/helpers.js");
+const pjson = require("./package.json");
 
 // palette
 const colors = { red: "\x1b[31m", green: "\x1b[32m", white: "\x1b[37m" };
@@ -114,16 +114,6 @@ let linkparser = new htmlparser.Parser(
   },
   { decodeEntities: true }
 );
-
-// check for http
-const tidyURI = site => {
-  if (site.includes("http://")) return site;
-  if (site.includes("htp://")) return site.replace("htp://", "http://");
-  if (site.includes("htt://")) return site.replace("htt://", "http://");
-  if (site.includes("https://")) return site;
-  return "http://" + site;
-};
-module.exports = validateURI;
 
 // get site html and load it into cheerio, then parser
 // args: <site url>, <scraping mode>
