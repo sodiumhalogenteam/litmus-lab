@@ -16,6 +16,7 @@ let linkArr = [];
 
 // tests
 let isAnalyticsFound = false;
+let noFollowFound = false;
 
 // check user's global version
 const checkVersion = () => {
@@ -31,12 +32,13 @@ const checkVersion = () => {
     const local = pjson.version.trim();
     const npm = stdout.trim().toString("utf8");
     // only check major and minor versioning
-    if (local.slice(0, -1) != npm.slice(0, -1))
+    if (local.slice(0, -1) < npm.slice(0, -1))
       console.log(
-        `\x1b[32m`, // green
-        `😎  Litmus-Lab update available: ${stdout}`,
-        "\x1b[37m", // white
-        `run $ npm update i -g litmus-lab`
+        " 😎",
+        colors.green,
+        `Litmus-Lab update available: ${stdout}`,
+        colors.white,
+        `  run $ npm update i -g litmus-lab`
       );
   });
   // }
@@ -71,6 +73,19 @@ let analyticsparser = new htmlparser.Parser(
     ontext: function(text) {
       // check for google analytics
       if (text.includes("google-analytics.com/analytics.js")) {
+        console.log(
+          colors.green,
+          "✓",
+          colors.white,
+          site,
+          "has Google Analytics"
+        );
+        isAnalyticsFound = true;
+      }
+    },
+    onopentag: function(name, attribs) {
+      if (!attribs.src) return;
+      if (name === "script" && attribs.src.includes("googletagmanager")) {
         console.log(
           colors.green,
           "✓",
@@ -115,6 +130,23 @@ let linkparser = new htmlparser.Parser(
   { decodeEntities: true }
 );
 
+let nofollowparser = new htmlparser.Parser(
+  {
+    onopentag: function(name, attribs) {
+      if (!attribs.name || !attribs.content) return;
+      if (
+        name === "meta" &&
+        attribs.name === "robots" &&
+        attribs.content === "nofollow"
+      ) {
+        console.log(colors.red, "✕", colors.white, site, "has a nofollow tag");
+        noFollowFound = true;
+      }
+    }
+  },
+  { decodeEntities: true }
+);
+
 // get site html and load it into cheerio, then parser
 // args: <site url>, <scraping mode>
 /*
@@ -143,8 +175,20 @@ const testSite = (site, mode) => {
           "does not have Google Analytics"
         );
 
+      // check 404 links
       linkparser.write(html);
       linkparser.end();
+      // check for nofollow tag
+      nofollowparser.write(html);
+      nofollowparser.end();
+      if (!noFollowFound)
+        console.error(
+          colors.green,
+          "✓",
+          colors.white,
+          site,
+          "does not have a nofollow tag"
+        );
     })
     .catch(function error() {
       if (mode == 1) return 0;
@@ -158,6 +202,10 @@ let argv = require("yargs-parser")(process.argv.slice(2));
 let batchSites = argv.s;
 
 const main = async () => {
+  if (argv.version) {
+    console.log("version", pjson.version);
+    return;
+  }
   site = argv.s;
   if (!site) {
     result = await prompts({
