@@ -201,7 +201,7 @@ const testSiteUrl = (site, mode) => {
 };
 
 const checkForSitemap = async sitemapUrl => {
-  let sitemap = await testSiteUrl(sitemapUrl, 1);
+  let sitemap = await testSiteUrl(sitemapUrl, MODES.CHECK404S);
   if (!sitemap) {
     console.log(
       colors.red,
@@ -224,7 +224,7 @@ const checkForSitemap = async sitemapUrl => {
 const checkLinks = async () => {
   let badLinks = 0;
   for (let i = 0; i < linkArr.length; i++) {
-    let goodLink = await testSiteUrl(linkArr[i], 1);
+    let goodLink = await testSiteUrl(linkArr[i], MODES.CHECK404S);
     if (!goodLink) {
       badLinks = 1;
       console.log(colors.red, "✕", colors.white, linkArr[i], "leads to a 404");
@@ -266,7 +266,7 @@ const main = async () => {
   site = await tidyURI(site);
 
   // test for google analytics
-  await testSiteUrl(site, 0);
+  await testSiteUrl(site, MODES.ANALYTICS);
 
   // check for sitemap
   checkForSitemap(site + "/sitemap.xml");
