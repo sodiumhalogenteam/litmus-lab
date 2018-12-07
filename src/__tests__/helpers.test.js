@@ -1,4 +1,5 @@
 const helpers = require("../helpers.js");
+console.log = jest.fn();
 
 test("tidyURI() can tidy URI", () => {
   const site = "sodiumhalogen.com";
@@ -25,8 +26,8 @@ test("tidyURI() can tidy URI", () => {
 
 test("consoleLog() logs out", () => {
   let log = helpers.consoleLog(true, "sodiumhalogen.com");
-  // no need to test this, right? - Chance
-  expect(true).toBe(true);
+  // test last argument in log that === text
+  expect(console.log.mock.calls[0][3]).toBe("sodiumhalogen.com");
 });
 
 test("formatLink() adjusts link into valid link", () => {

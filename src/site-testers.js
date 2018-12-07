@@ -46,18 +46,6 @@ exports.collectLinks = async (html, site) => {
   return linkArr;
 };
 
-exports.getSiteHtml = site => {
-  return axios
-    .get(site)
-    .then(({ data }) => {
-      const $ = cheerio.load(data);
-      return $.html();
-    })
-    .catch(function error() {
-      console.log(error);
-    });
-};
-
 exports.findAnalytics = (html, site) => {
   let isAnalyticsFound = false;
   let analyticsparser = new htmlparser.Parser(

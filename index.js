@@ -57,7 +57,14 @@ const main = async () => {
   }
 
   site = await helpers.tidyURI(site);
-  const html = await tests.getSiteHtml(site);
+
+  // get HTML from site
+  const html = await axios
+    .get(site)
+    .then(({ data }) => cheerio.load(data).html())
+    .catch(function error() {
+      console.log(error);
+    });
 
   // test for google analytics
   await tests.findAnalytics(html, site);
