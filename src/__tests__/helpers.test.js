@@ -82,4 +82,7 @@ test("isLink() validates if link", () => {
 
   link = helpers.isLink("tel:1234567890");
   expect(link).toBe(0);
+
+  link = helpers.isLink("");
+  expect(link).toBe(0);
 });
