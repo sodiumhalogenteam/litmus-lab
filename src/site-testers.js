@@ -80,8 +80,10 @@ exports.findAnalytics = (html, site) => {
   analyticsparser.end();
   if (isAnalyticsFound) {
     helpers.consoleLog(RESULT.PASS, `${site} has Google Analytics`);
+    return true;
   } else {
     helpers.consoleLog(RESULT.FAIL, `${site} does not have Google Analytics`);
+    return false;
   }
 };
 
@@ -107,8 +109,10 @@ exports.checkForNoFollow = (html, site) => {
   nofollowparser.end();
   if (noFollowFound) {
     helpers.consoleLog(RESULT.FAIL, `${site} has a nofollow tag`);
+    return true;
   } else {
     helpers.consoleLog(RESULT.PASS, `${site} does not have a nofollow tag`);
+    return false;
   }
 };
 
@@ -123,9 +127,13 @@ exports.testUrl = url => {
 
 exports.checkForSitemap = async (sitemapUrl, site) => {
   let sitemap = await exports.testUrl(sitemapUrl);
-  if (!sitemap)
+  if (!sitemap) {
     helpers.consoleLog(RESULT.FAIL, `A sitemap does not exist for ${site}`);
-  else helpers.consoleLog(RESULT.PASS, `A sitemap does exist for ${site}`);
+    return false;
+  } else {
+    helpers.consoleLog(RESULT.PASS, `A sitemap does exist for ${site}`);
+    return true;
+  }
 };
 
 exports.checkLinks = async (linksArray, site) => {
@@ -142,5 +150,8 @@ exports.checkLinks = async (linksArray, site) => {
       RESULT.PASS,
       `No 404 links were found on ${site}. [Count: ${linksArray.length} links]`
     );
+    return false;
+  } else {
+    return true;
   }
 };
