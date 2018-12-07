@@ -1,31 +1,10 @@
 #!/usr/bin/env node
 
-const prompts = require("prompts");
-const axios = require("axios");
-const cheerio = require("cheerio");
 const { exec } = require("child_process");
-const htmlparser = require("htmlparser2");
-const tidyURI = require("./src/helpers.js");
+const prompts = require("prompts");
+const helpers = require("./src/helpers.js");
+const tests = require("./src/site-testers.js");
 const pjson = require("./package.json");
-
-// palette
-const colors = { red: "\x1b[31m", green: "\x1b[32m", white: "\x1b[37m" };
-
-let site;
-const RESULT = {
-  FAIL: false,
-  PASS: true
-};
-
-const consoleLog = (doesPass, txt) => {
-  console.log(
-    doesPass ? colors.green : colors.red,
-    doesPass ? "✓" : "✕",
-    colors.white,
-    txt,
-    site
-  );
-};
 
 // check user's global version
 const checkVersion = () => {
@@ -53,160 +32,7 @@ const checkVersion = () => {
   // }
 };
 
-// format links for 404 checking
-const formatLink = link => {
-  if (link.startsWith("/") || link.startsWith("./")) {
-    link = site + link;
-  } else if (
-    !link.includes(site) &&
-    !link.startsWith("http") &&
-    !link.startsWith("www")
-  ) {
-    link = site + "/" + link;
-  }
-  return link;
-};
-
-// check if links are website links or not
-function isLink(link) {
-  if (link[0] == "#") return 0;
-  if (link.startsWith("mailto")) return 0;
-  if (link.startsWith("tel")) return 0;
-  if (link === "") return 0;
-  return 1;
-}
-
-// 404 link checking parser
-let collectLinks = async html => {
-  let linkArr = [];
-  const linkparser = await new htmlparser.Parser(
-    {
-      onopentag: function(name, attribs) {
-        if (name === "link" && attribs.href) {
-          let link = attribs.href;
-          if (!isLink(link)) return;
-          link = formatLink(link);
-          linkArr.push(link);
-        } else if (name === "script" && attribs.src) {
-          let link = attribs.src;
-          if (!isLink(link)) return;
-          link = formatLink(link);
-          linkArr.push(link);
-        } else if (name === "a" && attribs.href) {
-          let link = attribs.href;
-          if (!isLink(link)) return;
-          link = formatLink(link);
-          linkArr.push(link);
-        } else if (name === "img" && attribs.src) {
-          let link = attribs.src;
-          if (!isLink(link)) return;
-          link = formatLink(link);
-          linkArr.push(link);
-        }
-      }
-    },
-    { decodeEntities: true }
-  );
-  await linkparser.write(html);
-  await linkparser.end();
-  return linkArr;
-};
-
-const getSiteHtml = site => {
-  return axios
-    .get(site)
-    .then(({ data }) => {
-      const $ = cheerio.load(data);
-      return $.html();
-    })
-    .catch(function error() {
-      console.log(error);
-    });
-};
-
-const findAnalytics = html => {
-  let isAnalyticsFound = false;
-  let analyticsparser = new htmlparser.Parser(
-    {
-      ontext: function(text) {
-        // check for google analytics
-        if (text.includes("google-analytics.com/analytics.js"))
-          isAnalyticsFound = true;
-      },
-      onopentag: function(name, attribs) {
-        if (!attribs.src) return;
-        if (name === "script" && attribs.src.includes("googletagmanager"))
-          isAnalyticsFound = true;
-      }
-    },
-    { decodeEntities: true }
-  );
-  // check for google analytics
-  analyticsparser.write(html);
-  analyticsparser.end();
-  if (isAnalyticsFound) {
-    consoleLog(RESULT.PASS, `${site} has Google Analytics`);
-  } else {
-    consoleLog(RESULT.FAIL, `${site} does not have Google Analytics`);
-  }
-};
-
-const checkForNoFollow = html => {
-  let noFollowFound = false;
-  const nofollowparser = new htmlparser.Parser(
-    {
-      onopentag: function(name, attribs) {
-        if (!attribs.name || !attribs.content) return;
-        if (
-          name === "meta" &&
-          attribs.name === "robots" &&
-          attribs.content === "nofollow"
-        ) {
-          noFollowFound = true;
-        }
-      }
-    },
-    { decodeEntities: true }
-  );
-  // check for nofollow tag
-  nofollowparser.write(html);
-  nofollowparser.end();
-  if (noFollowFound) {
-    consoleLog(RESULT.FAIL, `${site} has a nofollow tag`);
-  } else {
-    consoleLog(RESULT.PASS, `${site} does not have a nofollow tag`);
-  }
-};
-
-const testUrl = url => {
-  return axios
-    .get(url)
-    .then(({ data }) => true)
-    .catch(function error() {
-      return false;
-    });
-};
-
-const checkForSitemap = async sitemapUrl => {
-  let sitemap = await testUrl(sitemapUrl);
-  if (!sitemap) consoleLog(RESULT.FAIL, `A sitemap does not exist for ${site}`);
-  else consoleLog(RESULT.PASS, `A sitemap does exist for ${site}`);
-};
-
-const checkLinks = async linksArrary => {
-  let badLinks = 0;
-  console.log(`Testing ${linksArrary.length} links...`);
-  for (let i = 0; i < linksArrary.length; i++) {
-    let goodLink = await testUrl(linksArrary[i]);
-    if (!goodLink) {
-      badLinks = 1;
-      consoleLog(RESULT.FAIL, `${linksArrary[i]} leads to a 404`);
-    }
-  }
-  if (!badLinks) {
-    consoleLog(RESULT.PASS, `No 404 links were found on ${site}`);
-  }
-};
+let site;
 
 // get command line args; useful for multiple sites
 let argv = require("yargs-parser")(process.argv.slice(2));
@@ -230,21 +56,21 @@ const main = async () => {
     site = result.site;
   }
 
-  site = await tidyURI(site);
-  const html = await getSiteHtml(site);
+  site = await helpers.tidyURI(site);
+  const html = await tests.getSiteHtml(site);
 
   // test for google analytics
-  await findAnalytics(html);
+  await tests.findAnalytics(html, site);
 
   // check for noFollow
-  await checkForNoFollow();
+  await tests.checkForNoFollow(html, site);
 
   // check for sitemap
-  await checkForSitemap(site + "/sitemap.xml");
+  await tests.checkForSitemap(site + "/sitemap.xml");
 
   // check 404 link errors
-  const linkArray = await collectLinks(html);
-  await checkLinks(linkArray);
+  const linkArray = await tests.collectLinks(html, site);
+  await tests.checkLinks(linkArray, site);
 
   checkVersion();
 };
