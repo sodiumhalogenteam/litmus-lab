@@ -1,7 +1,7 @@
 const axios = require("axios");
-const cheerio = require("cheerio");
 const htmlparser = require("htmlparser2");
 const helpers = require("./helpers.js");
+const https = require("https");
 
 var exports = (module.exports = {});
 
@@ -106,7 +106,11 @@ exports.checkForNoFollow = (html, site) => {
 
 exports.testUrl = url => {
   return axios
-    .get(url)
+    .get(url, {
+      params: {
+        httpsAgent: new https.Agent({ keepAlive: true })
+      }
+    })
     .then(({ data }) => true)
     .catch(function error() {
       return false;

@@ -2,9 +2,14 @@
 
 const { exec } = require("child_process");
 const prompts = require("prompts");
+const cheerio = require("cheerio");
+const https = require("https");
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
+const pjson = require("./package.json");
+
+// custom helpers and tests
 const helpers = require("./src/helpers.js");
 const tests = require("./src/site-testers.js");
-const pjson = require("./package.json");
 
 // check user's global version
 const checkVersion = () => {
@@ -60,7 +65,11 @@ const main = async () => {
 
   // get HTML from site
   const html = await axios
-    .get(site)
+    .get(site, {
+      params: {
+        httpsAgent: new https.Agent({ keepAlive: true })
+      }
+    })
     .then(({ data }) => cheerio.load(data).html())
     .catch(function error() {
       console.log(error);
