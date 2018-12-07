@@ -22,3 +22,64 @@ test("tidyURI() can tidy URI", () => {
   const updatedSiteHttps = helpers.tidyURI(siteHttps);
   expect(updatedSiteHttps).toBe("https://sodiumhalogen.com");
 });
+
+test("consoleLog() logs out", () => {
+  let log = helpers.consoleLog(true, "sodiumhalogen.com");
+  // no need to test this, right? - Chance
+  expect(true).toBe(true);
+});
+
+test("formatLink() adjusts link into valid link", () => {
+  let link = helpers.formatLink("/about", "sodiumhalogen.com");
+  expect(link).toBe("sodiumhalogen.com/about");
+
+  link = helpers.formatLink("./about", "sodiumhalogen.com");
+  expect(link).toBe("sodiumhalogen.com./about");
+
+  link = helpers.formatLink("./about/", "sodiumhalogen.com");
+  expect(link).toBe("sodiumhalogen.com./about/");
+
+  link = helpers.formatLink("sodiumhalogen.com/about", "sodiumhalogen.com");
+  expect(link).toBe("sodiumhalogen.com/about");
+
+  link = helpers.formatLink(
+    "http://sodiumhalogen.com/about",
+    "sodiumhalogen.com"
+  );
+  expect(link).toBe("http://sodiumhalogen.com/about");
+
+  link = helpers.formatLink(
+    "https://sodiumhalogen.com/about",
+    "sodiumhalogen.com"
+  );
+  expect(link).toBe("https://sodiumhalogen.com/about");
+
+  link = helpers.formatLink("www.sodiumhalogen.com/about", "sodiumhalogen.com");
+  expect(link).toBe("www.sodiumhalogen.com/about");
+
+  link = helpers.formatLink("www.sodiumhalogen.com/about", "sodiumhalogen.com");
+  expect(link).toBe("www.sodiumhalogen.com/about");
+
+  link = helpers.formatLink("about", "sodiumhalogen.com");
+  expect(link).toBe("sodiumhalogen.com/about");
+});
+
+test("isLink() validates if link", () => {
+  let link = helpers.isLink("sodiumhalogen.com");
+  expect(link).toBe(1);
+
+  link = helpers.isLink("http://sodiumhalogen.com");
+  expect(link).toBe(1);
+
+  link = helpers.isLink("https://sodiumhalogen.com");
+  expect(link).toBe(1);
+
+  link = helpers.isLink("#Designtific-Method");
+  expect(link).toBe(0);
+
+  link = helpers.isLink("mailto:reallyreallyfake@email.com");
+  expect(link).toBe(0);
+
+  link = helpers.isLink("tel:1234567890");
+  expect(link).toBe(0);
+});
