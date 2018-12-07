@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const { exec } = require("child_process");
+const axios = require("axios");
 const prompts = require("prompts");
 const cheerio = require("cheerio");
 const https = require("https");
@@ -82,7 +83,7 @@ const main = async () => {
   await tests.checkForNoFollow(html, site);
 
   // check for sitemap
-  await tests.checkForSitemap(site + "/sitemap.xml");
+  await tests.checkForSitemap(site + "/sitemap.xml", site);
 
   // check 404 link errors
   const linkArray = await tests.collectLinks(html, site);
