@@ -4,7 +4,7 @@ const prompts = require("prompts");
 const axios = require("axios");
 const cheerio = require("cheerio");
 const { exec } = require("child_process");
-let htmlparser = require("htmlparser2");
+const htmlparser = require("htmlparser2");
 const tidyURI = require("./src/helpers.js");
 const pjson = require("./package.json");
 
@@ -12,11 +12,20 @@ const pjson = require("./package.json");
 const colors = { red: "\x1b[31m", green: "\x1b[32m", white: "\x1b[37m" };
 
 let site;
-let linkArr = [];
+const RESULT = {
+  FAIL: false,
+  PASS: true
+};
 
-// tests
-let isAnalyticsFound = false;
-let noFollowFound = false;
+const consoleLog = (doesPass, txt) => {
+  console.log(
+    doesPass ? colors.green : colors.red,
+    doesPass ? "✓" : "✕",
+    colors.white,
+    txt,
+    site
+  );
+};
 
 // check user's global version
 const checkVersion = () => {
@@ -67,177 +76,135 @@ function isLink(link) {
   return 1;
 }
 
-// google analytics parser
-let analyticsparser = new htmlparser.Parser(
-  {
-    ontext: function(text) {
-      // check for google analytics
-      if (text.includes("google-analytics.com/analytics.js")) {
-        console.log(
-          colors.green,
-          "✓",
-          colors.white,
-          site,
-          "has Google Analytics"
-        );
-        isAnalyticsFound = true;
+// 404 link checking parser
+let collectLinks = async html => {
+  let linkArr = [];
+  const linkparser = await new htmlparser.Parser(
+    {
+      onopentag: function(name, attribs) {
+        if (name === "link" && attribs.href) {
+          let link = attribs.href;
+          if (!isLink(link)) return;
+          link = formatLink(link);
+          linkArr.push(link);
+        } else if (name === "script" && attribs.src) {
+          let link = attribs.src;
+          if (!isLink(link)) return;
+          link = formatLink(link);
+          linkArr.push(link);
+        } else if (name === "a" && attribs.href) {
+          let link = attribs.href;
+          if (!isLink(link)) return;
+          link = formatLink(link);
+          linkArr.push(link);
+        } else if (name === "img" && attribs.src) {
+          let link = attribs.src;
+          if (!isLink(link)) return;
+          link = formatLink(link);
+          linkArr.push(link);
+        }
       }
     },
-    onopentag: function(name, attribs) {
-      if (!attribs.src) return;
-      if (name === "script" && attribs.src.includes("googletagmanager")) {
-        console.log(
-          colors.green,
-          "✓",
-          colors.white,
-          site,
-          "has Google Analytics"
-        );
-        isAnalyticsFound = true;
-      }
-    }
-  },
-  { decodeEntities: true }
-);
-
-// 404 link checking parser
-let linkparser = new htmlparser.Parser(
-  {
-    onopentag: function(name, attribs) {
-      if (name === "link" && attribs.href) {
-        let link = attribs.href;
-        if (!isLink(link)) return;
-        link = formatLink(link);
-        linkArr.push(link);
-      } else if (name === "script" && attribs.src) {
-        let link = attribs.src;
-        if (!isLink(link)) return;
-        link = formatLink(link);
-        linkArr.push(link);
-      } else if (name === "a" && attribs.href) {
-        let link = attribs.href;
-        if (!isLink(link)) return;
-        link = formatLink(link);
-        linkArr.push(link);
-      } else if (name === "img" && attribs.src) {
-        let link = attribs.src;
-        if (!isLink(link)) return;
-        link = formatLink(link);
-        linkArr.push(link);
-      }
-    }
-  },
-  { decodeEntities: true }
-);
-
-let nofollowparser = new htmlparser.Parser(
-  {
-    onopentag: function(name, attribs) {
-      if (!attribs.name || !attribs.content) return;
-      if (
-        name === "meta" &&
-        attribs.name === "robots" &&
-        attribs.content === "nofollow"
-      ) {
-        console.log(colors.red, "✕", colors.white, site, "has a nofollow tag");
-        noFollowFound = true;
-      }
-    }
-  },
-  { decodeEntities: true }
-);
-
-// get site html and load it into cheerio, then parser
-// args: <site url>, <scraping mode>
-const MODES = {
-  ANALYTICS: 0,
-  CHECK404S: 1
+    { decodeEntities: true }
+  );
+  await linkparser.write(html);
+  await linkparser.end();
+  return linkArr;
 };
-/*
-scrapping modes:
-  0: google analytics
-  1: check for 404
-*/
-const testSiteUrl = (site, mode) => {
+
+const getSiteHtml = site => {
   return axios
     .get(site)
     .then(({ data }) => {
-      if (mode == MODES.CHECK404S) return 1;
-      // format site data
       const $ = cheerio.load(data);
-      let html = $.html();
-
-      // check for google analytics
-      analyticsparser.write(html);
-      analyticsparser.end();
-      if (!isAnalyticsFound)
-        console.error(
-          colors.red,
-          "✕",
-          colors.white,
-          site,
-          "does not have Google Analytics"
-        );
-
-      // check 404 links
-      linkparser.write(html);
-      linkparser.end();
-      // check for nofollow tag
-      nofollowparser.write(html);
-      nofollowparser.end();
-      if (!noFollowFound)
-        console.error(
-          colors.green,
-          "✓",
-          colors.white,
-          site,
-          "does not have a nofollow tag"
-        );
+      return $.html();
     })
     .catch(function error() {
-      if (mode == MODES.CHECK404S) return 0;
-      else console.log(error);
+      console.log(error);
+    });
+};
+
+const findAnalytics = html => {
+  let isAnalyticsFound = false;
+  let analyticsparser = new htmlparser.Parser(
+    {
+      ontext: function(text) {
+        // check for google analytics
+        if (text.includes("google-analytics.com/analytics.js"))
+          isAnalyticsFound = true;
+      },
+      onopentag: function(name, attribs) {
+        if (!attribs.src) return;
+        if (name === "script" && attribs.src.includes("googletagmanager"))
+          isAnalyticsFound = true;
+      }
+    },
+    { decodeEntities: true }
+  );
+  // check for google analytics
+  analyticsparser.write(html);
+  analyticsparser.end();
+  if (isAnalyticsFound) {
+    consoleLog(RESULT.PASS, `${site} has Google Analytics`);
+  } else {
+    consoleLog(RESULT.FAIL, `${site} does not have Google Analytics`);
+  }
+};
+
+const checkForNoFollow = html => {
+  let noFollowFound = false;
+  const nofollowparser = new htmlparser.Parser(
+    {
+      onopentag: function(name, attribs) {
+        if (!attribs.name || !attribs.content) return;
+        if (
+          name === "meta" &&
+          attribs.name === "robots" &&
+          attribs.content === "nofollow"
+        ) {
+          noFollowFound = true;
+        }
+      }
+    },
+    { decodeEntities: true }
+  );
+  // check for nofollow tag
+  nofollowparser.write(html);
+  nofollowparser.end();
+  if (noFollowFound) {
+    consoleLog(RESULT.FAIL, `${site} has a nofollow tag`);
+  } else {
+    consoleLog(RESULT.PASS, `${site} does not have a nofollow tag`);
+  }
+};
+
+const testUrl = url => {
+  return axios
+    .get(url)
+    .then(({ data }) => true)
+    .catch(function error() {
+      return false;
     });
 };
 
 const checkForSitemap = async sitemapUrl => {
-  let sitemap = await testSiteUrl(sitemapUrl, MODES.CHECK404S);
-  if (!sitemap) {
-    console.log(
-      colors.red,
-      "✕",
-      colors.white,
-      "A sitemap does not exist for",
-      site
-    );
-  } else {
-    console.log(
-      colors.green,
-      "✓",
-      colors.white,
-      "A sitemap does exist for",
-      site
-    );
-  }
+  let sitemap = await testUrl(sitemapUrl);
+  if (!sitemap) consoleLog(RESULT.FAIL, `A sitemap does not exist for ${site}`);
+  else consoleLog(RESULT.PASS, `A sitemap does exist for ${site}`);
 };
 
-const checkLinks = async () => {
+const checkLinks = async linksArrary => {
   let badLinks = 0;
-  for (let i = 0; i < linkArr.length; i++) {
-    let goodLink = await testSiteUrl(linkArr[i], MODES.CHECK404S);
+  console.log(`Testing ${linksArrary.length} links...`);
+  for (let i = 0; i < linksArrary.length; i++) {
+    let goodLink = await testUrl(linksArrary[i]);
     if (!goodLink) {
       badLinks = 1;
-      console.log(colors.red, "✕", colors.white, linkArr[i], "leads to a 404");
+      consoleLog(RESULT.FAIL, `${linksArrary[i]} leads to a 404`);
     }
   }
   if (!badLinks) {
-    console.log(
-      colors.green,
-      "✓",
-      colors.white,
-      "No 404 links were found on",
-      site
-    );
+    consoleLog(RESULT.PASS, `No 404 links were found on ${site}`);
   }
 };
 
@@ -264,15 +231,20 @@ const main = async () => {
   }
 
   site = await tidyURI(site);
+  const html = await getSiteHtml(site);
 
   // test for google analytics
-  await testSiteUrl(site, MODES.ANALYTICS);
+  await findAnalytics(html);
+
+  // check for noFollow
+  await checkForNoFollow();
 
   // check for sitemap
-  checkForSitemap(site + "/sitemap.xml");
+  await checkForSitemap(site + "/sitemap.xml");
 
   // check 404 link errors
-  checkLinks();
+  const linkArray = await collectLinks(html);
+  await checkLinks(linkArray);
 
   checkVersion();
 };
