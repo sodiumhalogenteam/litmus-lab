@@ -16,7 +16,7 @@
   "scripts": {
     "test": "jest --coverage",
     "test:watch": "jest --watch",
-    "start": "node ./dist/index.js",
+    "start": "npm run build && node ./dist/index.js",
     "build": "ncc build index.js -o dist",
     "build-push": "npm run build && git add ./dist && git commit -m \"push build 🚀\" && git push",
     "patch-release": "npm run build-push && npm version patch && npm publish && git push --follow-tags",
