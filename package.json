@@ -20,7 +20,7 @@
     "test": "jest --coverage",
     "test:watch": "jest --watch",
     "start": "npm run build && node ./dist/index.js",
-    "build": "ncc build index.js -o dist",
+    "build": "ncc build index.js -o dist && echo '#!/usr/bin/env node'|cat - ./dist/index.js > /tmp/out && mv /tmp/out ./dist/index.js",
     "build-push": "npm run build && git add ./dist && git commit -m \"push build 🚀\" && git push",
     "patch-release": "npm run build-push && npm version patch && npm publish && git push --follow-tags",
     "minor-release": "npm run build-push && npm version minor && npm publish && git push --follow-tags",
@@ -36,7 +36,7 @@
     "url": "https://github.com/sodiumhalogenteam/litmus-lab/issues"
   },
   "homepage": "https://github.com/sodiumhalogenteam/litmus-lab#readme",
-  "dependencies": {
+  "devDependencies": {
     "axios": "^0.18.0",
     "cheerio": "^1.0.0-rc.2",
     "commander": "^2.19.0",
@@ -44,8 +44,7 @@
     "prompts": "^1.2.1",
     "yargs-parser": "^11.1.1"
   },
-  "contributors": [
-    {
+  "contributors": [{
       "name": "Adam Curl",
       "email": "adam@sodiumhalogen.com",
       "url": "http://github.com/adamcurl"
