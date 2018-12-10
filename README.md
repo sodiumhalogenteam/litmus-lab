@@ -21,8 +21,13 @@ A site checker that tests elements of a website.
 ## future ideas:
 
 - [ ] test multiple urls?
-- [ ] check other pages on the site (check links/imgs)
+- [ ] check other pages on the site (check links/imgs) using sitemap
 - [ ] add custom scripts \$`litmus-lab sodiumhalogen.com --script=./custom-tests.js`
 - [ ] test monthly form submission confirmation (customer gets monthly contact form submission test)
 - [ ] (custom script example) test monthly form submission confirmation (customer gets monthly contact form submission test)
 - [ ] update Slack of failures \$`litmus-lab -s sodiumhalogen.com --slack HOOK_URL`
+- [ ] SEO-related tests
+- [ ] spell-checking
+- [ ] check for invalid HTML
+- [ ] STDs (site-transmited diseases, aka malware) 😝
+- [ ] console errors
