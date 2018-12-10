@@ -17,6 +17,7 @@ A site checker that tests elements of a website.
 - [x] google analytics is added
 - [x] any 404s in console? (missing files)
 - [x] check for `<meta name="robots" content="nofollow" />` not present
+- [ ] check if the site is indexed/cached by Google
 
 ## future ideas:
 
