@@ -9,9 +9,10 @@
     "check analytics",
     "check sitemap"
   ],
-  "main": "index.js",
+  "files": ["dist/**/*.js"],
+  "main": "./dist/index.js",
   "bin": {
-    "litmus-lab": "index.js"
+    "litmus-lab": "./dist/index.js"
   },
   "scripts": {
     "test": "jest --coverage",
@@ -41,8 +42,7 @@
     "prompts": "^1.2.1",
     "yargs-parser": "^11.1.1"
   },
-  "contributors": [
-    {
+  "contributors": [{
       "name": "Adam Curl",
       "email": "adam@sodiumhalogen.com",
       "url": "http://github.com/adamcurl"
