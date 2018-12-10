@@ -4,7 +4,7 @@
 
 A site checker that tests elements of a website.
 
-![litmus-lab example](https://sh-drop.s3.us-east-1.amazonaws.com/cs/litmus-lab-example.png)
+![litmus-lab example](https://sh-drop.s3.us-east-1.amazonaws.com/cs/litmus-lab-example-1.png)
 
 ## get to testing 🚀
 
