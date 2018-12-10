@@ -31,3 +31,6 @@ A site checker that tests elements of a website.
 - [ ] check for invalid HTML
 - [ ] STDs (site-transmited diseases, aka malware) 😝
 - [ ] console errors
+- [ ] add option to output JSON
+- [ ] make a lambda that runs script
+- [ ] build site that outputs a dashboard
