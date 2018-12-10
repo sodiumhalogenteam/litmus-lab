@@ -9,16 +9,19 @@
     "check analytics",
     "check sitemap"
   ],
-  "main": "index.js",
+  "main": "./dist/index.js",
   "bin": {
-    "litmus-lab": "index.js"
+    "litmus-lab": "./dist/index.js"
   },
   "scripts": {
     "test": "jest --coverage",
     "test:watch": "jest --watch",
-    "patch-release": "npm version patch && npm publish && git push --follow-tags",
-    "minor-release": "npm version minor && npm publish && git push --follow-tags",
-    "major-release": "npm version major && npm publish && git push --follow-tags"
+    "start": "npm run build && node ./dist/index.js",
+    "build": "ncc build index.js -o dist",
+    "build-push": "npm run build && git add ./dist && git commit -m \"push build 🚀\" && git push",
+    "patch-release": "npm run build-push && npm version patch && npm publish && git push --follow-tags",
+    "minor-release": "npm run build-push && npm version minor && npm publish && git push --follow-tags",
+    "major-release": "npm run build-push && npm version major && npm publish && git push --follow-tags"
   },
   "repository": {
     "type": "git",
@@ -38,8 +41,7 @@
     "prompts": "^1.2.1",
     "yargs-parser": "^11.1.1"
   },
-  "contributors": [
-    {
+  "contributors": [{
       "name": "Adam Curl",
       "email": "adam@sodiumhalogen.com",
       "url": "http://github.com/adamcurl"
@@ -56,6 +58,7 @@
     }
   ],
   "devDependencies": {
+    "@zeit/ncc": "^0.5.0",
     "husky": "^1.2.0",
     "jest": "^23.6.0"
   },
