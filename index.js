@@ -10,6 +10,11 @@ const pjson = require("./package.json");
 const helpers = require("./src/helpers.js");
 const tests = require("./src/site-testers.js");
 
+const RESULT = {
+  FAIL: false,
+  PASS: true
+};
+
 // check user's global version
 const checkVersion = () => {
   // TODO: add version tag - Chance 12/9/18 https://github.com/sodiumhalogenteam/litmus-lab/issues/7
@@ -44,6 +49,7 @@ let argv = require("yargs-parser")(process.argv.slice(2));
 // let batchSites = argv.s;
 
 const main = async () => {
+  let foundError = false;
   if (argv.version) {
     console.log("version", pjson.version);
     return;
@@ -61,32 +67,73 @@ const main = async () => {
   }
 
   site = await helpers.tidyURI(site);
-
-  // get HTML from site
-  const html = await axios
-    .get(site, {
+  // get Google cache HTML from site
+  let cacheCheckFailed = false;
+  const googleCacheHtml = await axios
+    .get(`http://webcache.googleusercontent.com/search?q=cache:${site}`, {
       params: {
         httpsAgent: new https.Agent({ keepAlive: true })
       }
     })
     .then(({ data }) => cheerio.load(data).html())
-    .catch(function error() {
-      console.log(error);
+    .catch(function(error) {
+      if (error.response) {
+        if (error.response.status === 404) {
+          helpers.consoleLog(
+            RESULT.FAIL,
+            `${site} was not found on Google cache [${error.response.status}]`
+          );
+          cacheCheckFailed = true;
+        } else {
+          helpers.consoleLog(
+            RESULT.FAIL,
+            `${site} an error was found [${error.response.status}]`,
+            error.response.headers
+          );
+          // helpers.consoleLog(error.response.headers);
+          // helpers.consoleLog(error.response.data);
+          foundError = true;
+        }
+      }
     });
 
   // test for google analytics
-  await tests.findAnalytics(html, site);
+  if (!foundError && !cacheCheckFailed)
+    await tests.checkGoogleCache(googleCacheHtml, site);
 
-  // check for noFollow
-  await tests.checkForNoFollow(html, site);
+  // get HTML from site
+  let html = "";
+  if (!foundError) {
+    html = await axios
+      .get(site, {
+        params: {
+          httpsAgent: new https.Agent({ keepAlive: true })
+        }
+      })
+      .then(({ data }) => cheerio.load(data).html())
+      .catch(function(error) {
+        helpers.consoleLog(RESULT.FAIL, `${site} an error was found`, error);
+        foundError = true;
+      });
+  }
 
-  // check for sitemap
-  await tests.checkForSitemap(site + "/sitemap.xml", site);
+  if (!foundError) {
+    // test for google analytics
+    await tests.findAnalytics(html, site);
 
-  // check 404 link errors
-  const linkArray = await tests.collectLinks(html, site);
-  await tests.checkLinks(linkArray, site);
+    // check for noFollow
+    await tests.checkForNoFollow(html, site);
 
-  checkVersion();
+    // check for sitemap
+    await tests.checkForSitemap(site + "/sitemap.xml", site);
+
+    // check 404 link errors
+    const linkArray = await tests.collectLinks(html, site);
+    await tests.checkLinks(linkArray, site);
+
+    checkVersion();
+  } else {
+    console.log(`See above error to see why tests didn't start`);
+  }
 };
 main();

@@ -163,3 +163,13 @@ test("checkLinks() checks for 404s", async () => {
   // expect(mockAxios.get).toHaveBeenCalledWith("sodiumhalogen.com", httpsParams);
   // expect(mockAxios.get).toHaveBeenCalledWith("alygn.com", httpsParams);
 });
+
+test("checkGoogleCache() checks for Google Cache", async () => {
+  const hasGoogleCache = await tests.checkGoogleCache(
+    "<span>This is Google's cache of "
+  );
+  expect(hasGoogleCache).toBeTruthy();
+
+  const hasNoGoogleCache = await tests.checkGoogleCache(shHtml);
+  expect(hasNoGoogleCache).toBeFalsy();
+});
