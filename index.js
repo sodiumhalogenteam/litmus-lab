@@ -105,6 +105,7 @@ const main = async () => {
 
   // get HTML from site
   let redirectLink = "/";
+  let originSite = site;
   let html;
   while (connecting && !foundError) {
     html = await axios
@@ -114,6 +115,17 @@ const main = async () => {
         }
       })
       .then(({ data, request }) => {
+        // check for url redirect and compare site and hostname
+        // to see if any previous redirects occured
+        hostSite = helpers.tidyURI(request.socket._host);
+        if (site !== hostSite && originSite !== hostSite) {
+          site = hostSite;
+          console.log("    Redirecting to:", site);
+          redirectLink = "/";
+          connecting = true;
+          return;
+        }
+        // check for page redirect
         if (request._redirectable._options.pathname !== redirectLink) {
           redirectLink = request._redirectable._options.pathname;
           site = site + request._redirectable._options.pathname;
@@ -122,6 +134,7 @@ const main = async () => {
           connecting = true;
           return;
         }
+        // no redirect, load html data
         connecting = false;
         return cheerio.load(data).html();
       })
