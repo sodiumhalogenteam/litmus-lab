@@ -37,6 +37,7 @@ const checkVersion = () => {
 };
 
 let site;
+let connecting = true;
 
 // get command line args; useful for multiple sites
 let argv = require("yargs-parser")(process.argv.slice(2));
@@ -63,16 +64,31 @@ const main = async () => {
   site = await helpers.tidyURI(site);
 
   // get HTML from site
-  const html = await axios
-    .get(site, {
-      params: {
-        httpsAgent: new https.Agent({ keepAlive: true })
-      }
-    })
-    .then(({ data }) => cheerio.load(data).html())
-    .catch(function error() {
-      console.log(error);
-    });
+  let redirectLink = "/";
+  let html;
+  while (connecting) {
+    html = await axios
+      .get(site, {
+        params: {
+          httpsAgent: new https.Agent({ keepAlive: true })
+        }
+      })
+      .then(({ data, request }) => {
+        if (request._redirectable._options.pathname !== redirectLink) {
+          redirectLink = request._redirectable._options.pathname;
+          site = site + request._redirectable._options.pathname;
+          site = site.slice(0, -1);
+          console.log("    Redirecting to:", site);
+          connecting = true;
+          return;
+        }
+        connecting = false;
+        return cheerio.load(data).html();
+      })
+      .catch(function error() {
+        console.log(error);
+      });
+  }
 
   // test for google analytics
   await tests.findAnalytics(html, site);

@@ -35,10 +35,10 @@ test("formatLink() adjusts link into valid link", () => {
   expect(link).toBe("sodiumhalogen.com/about");
 
   link = helpers.formatLink("./about", "sodiumhalogen.com");
-  expect(link).toBe("sodiumhalogen.com./about");
+  expect(link).toBe("sodiumhalogen.com/about");
 
   link = helpers.formatLink("./about/", "sodiumhalogen.com");
-  expect(link).toBe("sodiumhalogen.com./about/");
+  expect(link).toBe("sodiumhalogen.com/about/");
 
   link = helpers.formatLink("sodiumhalogen.com/about", "sodiumhalogen.com");
   expect(link).toBe("sodiumhalogen.com/about");

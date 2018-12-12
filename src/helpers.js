@@ -25,6 +25,7 @@ exports.consoleLog = (doesPass, txt) => {
 // format links for 404 checking
 exports.formatLink = (link, site) => {
   if (link.startsWith("/") || link.startsWith("./")) {
+    link = link.replace("./", "/");
     link = site + link;
   } else if (
     !link.includes(site) &&
