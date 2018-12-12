@@ -19,6 +19,7 @@ A site checker that tests elements of a website.
 - [x] check for `<meta name="robots" content="nofollow" />` not present
 - [x] check if the site is indexed/cached by Google
 - [x] check if site is up/available
+- [x] check for site redirects
 
 ## future ideas:
 
