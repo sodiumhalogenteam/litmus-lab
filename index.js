@@ -69,32 +69,6 @@ const main = async () => {
 
   site = await helpers.tidyURI(site);
 
-  // get HTML from site
-  let redirectLink = "/";
-  let html;
-  while (connecting) {
-    html = await axios
-      .get(site, {
-        params: {
-          httpsAgent: new https.Agent({ keepAlive: true })
-        }
-      })
-      .then(({ data, request }) => {
-        if (request._redirectable._options.pathname !== redirectLink) {
-          redirectLink = request._redirectable._options.pathname;
-          site = site + request._redirectable._options.pathname;
-          site = site.slice(0, -1);
-          console.log("    Redirecting to:", site);
-          connecting = true;
-          return;
-        }
-        connecting = false;
-        return cheerio.load(data).html();
-      })
-      .catch(function error() {
-        console.log(error);
-      });
-  }
   // get Google cache HTML from site
   let cacheCheckFailed = false;
   const googleCacheHtml = await axios
@@ -130,15 +104,27 @@ const main = async () => {
     await tests.checkGoogleCache(googleCacheHtml, site);
 
   // get HTML from site
-  let html = "";
-  if (!foundError) {
+  let redirectLink = "/";
+  let html;
+  while (connecting && !foundError) {
     html = await axios
       .get(site, {
         params: {
           httpsAgent: new https.Agent({ keepAlive: true })
         }
       })
-      .then(({ data }) => cheerio.load(data).html())
+      .then(({ data, request }) => {
+        if (request._redirectable._options.pathname !== redirectLink) {
+          redirectLink = request._redirectable._options.pathname;
+          site = site + request._redirectable._options.pathname;
+          site = site.slice(0, -1);
+          console.log("    Redirecting to:", site);
+          connecting = true;
+          return;
+        }
+        connecting = false;
+        return cheerio.load(data).html();
+      })
       .catch(function(error) {
         helpers.consoleLog(RESULT.FAIL, `${site} an error was found`, error);
         foundError = true;
