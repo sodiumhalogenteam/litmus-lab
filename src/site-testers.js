@@ -104,6 +104,17 @@ exports.checkForNoFollow = (html, site) => {
   }
 };
 
+exports.checkGoogleCache = (html, site) => {
+  let isCacheFound = html.includes("This is Google");
+  if (isCacheFound) {
+    helpers.consoleLog(RESULT.PASS, `${site} is cached by Google`);
+    return true;
+  } else {
+    helpers.consoleLog(RESULT.FAIL, `${site} is not cached by Google`);
+    return false;
+  }
+};
+
 exports.testUrl = url => {
   return axios
     .get(url, {
