@@ -9,19 +9,19 @@ test("tidyURI() can tidy URI", () => {
   const siteHttps = "https://sodiumhalogen.com";
 
   const updatedSite = helpers.tidyURI(site);
-  expect(updatedSite).toBe("http://sodiumhalogen.com");
+  expect(updatedSite).toBe("http://www.sodiumhalogen.com");
 
   const updatedSiteHttp = helpers.tidyURI(siteHttp);
-  expect(updatedSiteHttp).toBe("http://sodiumhalogen.com");
+  expect(updatedSiteHttp).toBe("http://www.sodiumhalogen.com");
 
   const updatedSite2 = helpers.tidyURI(siteHttp2);
-  expect(updatedSite2).toBe("http://sodiumhalogen.com");
+  expect(updatedSite2).toBe("http://www.sodiumhalogen.com");
 
   const updatedSite3 = helpers.tidyURI(siteHttp3);
-  expect(updatedSite2).toBe("http://sodiumhalogen.com");
+  expect(updatedSite2).toBe("http://www.sodiumhalogen.com");
 
   const updatedSiteHttps = helpers.tidyURI(siteHttps);
-  expect(updatedSiteHttps).toBe("https://sodiumhalogen.com");
+  expect(updatedSiteHttps).toBe("https://www.sodiumhalogen.com");
 });
 
 test("consoleLog() logs out", () => {

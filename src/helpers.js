@@ -2,10 +2,14 @@ var exports = (module.exports = {});
 
 // check for http
 exports.tidyURI = site => {
+  if (site.includes("htp://")) site = site.replace("htp://", "http://");
+  if (site.includes("htt://")) site = site.replace("htt://", "http://");
   if (!site.includes("www.")) site = "www." + site;
+  if (site.includes("www.http://"))
+    site = site.replace("www.http://", "http://www.");
+  if (site.includes("www.https://"))
+    site = site.replace("www.https://", "https://www.");
   if (site.includes("http://")) return site;
-  if (site.includes("htp://")) return site.replace("htp://", "http://");
-  if (site.includes("htt://")) return site.replace("htt://", "http://");
   if (site.includes("https://")) return site;
   return "http://" + site;
 };
