@@ -20,6 +20,7 @@ A site checker that tests elements of a website.
 - [x] check if the site is indexed/cached by Google
 - [x] check if site is up/available
 - [x] check for site redirects
+- [ ] filter showing only fails
 
 ## future ideas:
 
