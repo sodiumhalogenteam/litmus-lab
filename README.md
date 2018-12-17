@@ -1,6 +1,7 @@
 # Litmus Lab
 
 [![litmus-lab npm version](https://img.shields.io/npm/v/litmus-lab.svg)](https://npmjs.org/package/litmus-lab)
+[![litmus-lab npm downloads](https://img.shields.io/npm/dt/litmus-lab.svg)](https://npmjs.org/package/litmus-lab)
 
 A site checker that tests elements of a website.
 
