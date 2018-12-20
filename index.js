@@ -32,9 +32,9 @@ const checkVersion = () => {
     if (local.slice(0, -1) < npm.slice(0, -1))
       console.log(
         " 😎",
-        colors.green,
+        helpers.colors.green,
         `Litmus-Lab update available: ${stdout}`,
-        colors.white,
+        helpers.colors.white,
         `  run $ npm update i -g litmus-lab`
       );
   });
