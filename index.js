@@ -160,7 +160,7 @@ const main = async () => {
 
     checkVersion();
   } else {
-    console.log(`See above error to see why tests didn't start`);
+    console.log(`See above error to see why tests ad trouble.`);
   }
 };
 main();
