@@ -27,6 +27,7 @@ A site checker that tests elements of a website.
 ## future ideas:
 
 - [ ] test multiple urls?
+- [ ] check if using Jquery and what version (>= v3.4.0)
 - [ ] check other pages on the site (check links/imgs) using sitemap
 - [ ] add custom scripts \$`litmus-lab sodiumhalogen.com --script=./custom-tests.js`
 - [ ] test monthly form submission confirmation (customer gets monthly contact form submission test)
