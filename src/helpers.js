@@ -47,6 +47,7 @@ exports.isLink = link => {
   if (link[0] == "#") return 0;
   if (link.startsWith("mailto")) return 0;
   if (link.startsWith("tel")) return 0;
+  if (link.startsWith("data:image")) return 0;
   if (link === "") return 0;
   return 1;
 };
