@@ -67,10 +67,10 @@ exports.findAnalytics = (html, site) => {
   analyticsparser.write(html);
   analyticsparser.end();
   if (isAnalyticsFound) {
-    helpers.consoleLog(RESULT.PASS, `${site} has Google Analytics`);
+    helpers.consoleLog(RESULT.PASS, `site has Google Analytics`);
     return true;
   } else {
-    helpers.consoleLog(RESULT.FAIL, `${site} does not have Google Analytics`);
+    helpers.consoleLog(RESULT.FAIL, `site does not have Google Analytics`);
     return false;
   }
 };
@@ -96,10 +96,10 @@ exports.checkForNoFollow = (html, site) => {
   nofollowparser.write(html);
   nofollowparser.end();
   if (noFollowFound) {
-    helpers.consoleLog(RESULT.FAIL, `${site} has a nofollow tag`);
+    helpers.consoleLog(RESULT.FAIL, `site has a nofollow tag`);
     return true;
   } else {
-    helpers.consoleLog(RESULT.PASS, `${site} does not have a nofollow tag`);
+    helpers.consoleLog(RESULT.PASS, `site does not have a nofollow tag`);
     return false;
   }
 };
@@ -107,10 +107,10 @@ exports.checkForNoFollow = (html, site) => {
 exports.checkGoogleCache = (html, site) => {
   let isCacheFound = html.includes("This is Google");
   if (isCacheFound) {
-    helpers.consoleLog(RESULT.PASS, `${site} is cached by Google`);
+    helpers.consoleLog(RESULT.PASS, `site is cached by Google`);
     return true;
   } else {
-    helpers.consoleLog(RESULT.FAIL, `${site} is not cached by Google`);
+    helpers.consoleLog(RESULT.FAIL, `site is not cached by Google`);
     return false;
   }
 };
@@ -131,10 +131,10 @@ exports.testUrl = url => {
 exports.checkForSitemap = async (sitemapUrl, site) => {
   let sitemap = await exports.testUrl(sitemapUrl);
   if (!sitemap) {
-    helpers.consoleLog(RESULT.FAIL, `A sitemap does not exist for ${site}`);
+    helpers.consoleLog(RESULT.FAIL, `sitemap does not exist`);
     return false;
   } else {
-    helpers.consoleLog(RESULT.PASS, `A sitemap does exist for ${site}`);
+    helpers.consoleLog(RESULT.PASS, `sitemap exists`);
     return true;
   }
 };
@@ -151,7 +151,7 @@ exports.checkLinks = async (linksArray, site) => {
   if (!badLinks) {
     helpers.consoleLog(
       RESULT.PASS,
-      `No 404 links were found on ${site}. [Count: ${linksArray.length} links]`
+      `No 404 links were found on this site. [Count: ${linksArray.length} links]`
     );
     return false;
   } else {
