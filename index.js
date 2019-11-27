@@ -43,6 +43,7 @@ const checkVersion = () => {
 
 let site;
 let connecting = true;
+let testAnotherSite = true;
 
 // get command line args; useful for multiple sites
 let argv = require("yargs-parser")(process.argv.slice(2));
@@ -50,12 +51,15 @@ let argv = require("yargs-parser")(process.argv.slice(2));
 // let batchSites = argv.s;
 
 const main = async () => {
+  testAnotherSite = false;
+  connecting = true;
   let foundError = false;
   if (argv.version) {
     console.log("version", pjson.version);
     return;
   }
   site = argv.s;
+  filtered = argv.f;
   if (!site) {
     // prompt user for input
     result = await prompts({
@@ -66,9 +70,23 @@ const main = async () => {
     });
     site = result.site;
   }
+  if (!filtered) {
+    result = await prompts({
+      type: "text",
+      name: "filtered",
+      initial: "Type y or n",
+      message: "Would you like to filter the results by error only?"
+    });
+    filtered = result.filtered;
+  }
+
+  if (filtered == "y") {
+    filtered = true;
+  } else {
+    filtered = false;
+  }
 
   site = await helpers.tidyURI(site);
-
   // get Google cache HTML from site
   let cacheCheckFailed = false;
   const googleCacheHtml = await axios
@@ -146,21 +164,41 @@ const main = async () => {
 
   if (!foundError) {
     // test for google analytics
-    await tests.findAnalytics(html, site);
+    await tests.findAnalytics(html, site, filtered);
 
     // check for noFollow
-    await tests.checkForNoFollow(html, site);
+    await tests.checkForNoFollow(html, site, filtered);
 
     // check for sitemap
-    await tests.checkForSitemap(site + "/sitemap.xml", site);
+    await tests.checkForSitemap(site + "/sitemap.xml", site, filtered);
+
+    // check for jquery
+    await tests.checkForJquery(html, site, filtered);
 
     // check 404 link errors
-    const linkArray = await tests.collectLinks(html, site);
-    await tests.checkLinks(linkArray, site);
-
+    const linkArray = await tests.collectLinks(html, site, filtered);
+    await tests.checkLinks(linkArray, site, filtered);
     checkVersion();
   } else {
     console.log(`See above error to see why tests ad trouble.`);
   }
+  result = await prompts({
+    type: "text",
+    name: "testAnother",
+    initial: "Type y or n",
+    message: "Would you like to test another site?"
+  });
+  testAnother = result.testAnother;
+  if (testAnother == "y") {
+    testAnotherSite = true;
+  } else {
+    testAnotherSite = false;
+  }
+  if (testAnotherSite == true) {
+    while (testAnotherSite == true) {
+      main();
+    }
+  }
 };
+
 main();
