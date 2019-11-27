@@ -34,7 +34,7 @@ A site checker that tests elements of a website.
 - [ ] (custom script example) test monthly form submission confirmation (customer gets monthly contact form submission test)
 - [ ] update Slack of failures \$`litmus-lab -s sodiumhalogen.com --slack HOOK_URL`
 - [ ] SEO-related tests
-- [ ] spell-checking
+- [ ] spell-checking (maybe [GrammarBot](https://www.grammarbot.io/quickstart))
 - [ ] check for invalid HTML
 - [ ] STDs (site-transmited diseases, aka malware) 😝
 - [ ] console errors
