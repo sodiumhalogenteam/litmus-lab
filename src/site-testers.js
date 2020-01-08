@@ -184,6 +184,22 @@ exports.checkForSitemap = async (sitemapUrl, site, filtered) => {
     return true;
   }
 };
+/* This Console Error Checker does not work yet. Right now all it does is say that every site 
+has no Javascript console errors because I don't know how to build something that allows for 
+me to check if a site has console errors. */ 
+exports.checkForConsoleErrors = async (html, site, filtered) => {
+  let JSConsoleErrorCount = 0; 
+  /* the code for finding the error should be here. if an error is found, JSConsoleErrorCount
+  variable should increment by 1 until the tool has checked the console logs completely */ 
+  if (!JSConsoleErrorCount) {
+    if (filtered == false) {
+    helpers.consoleLog(RESULT.PASS, `There are no JS Console Errors!`); 
+    }
+    return false; 
+  } else {
+    helpers.consoleLog(RESULT.FAIL, `There are ${JSConsoleErrorCount} JavaScript Console Errors`)
+  }
+}
 
 exports.checkLinks = async (linksArray, site, filtered) => {
   let badLinks = 0;
