@@ -5,6 +5,8 @@ const cheerio = require("cheerio");
 const https = require("https");
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
 const pjson = require("./package.json");
+const JSHINT = require('jshint').JSHINT;
+
 
 // custom helpers and tests
 const helpers = require("./src/helpers.js");
