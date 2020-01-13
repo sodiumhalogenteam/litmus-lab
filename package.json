@@ -85,5 +85,8 @@
       "pre-commit": "npm test",
       "pre-push": "npm test"
     }
+  },
+  "dependencies": {
+    "node": "^13.6.0"
   }
 }
