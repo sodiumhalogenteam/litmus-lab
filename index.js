@@ -16,7 +16,6 @@ const RESULT = {
   FAIL: false,
   PASS: true
 };
-
 // check user's global version
 const checkVersion = () => {
   // TODO: add version tag - Chance 12/9/18 https://github.com/sodiumhalogenteam/litmus-lab/issues/7

@@ -21,20 +21,20 @@ A site checker that tests elements of a website.
 - [x] check if the site is indexed/cached by Google
 - [x] check if site is up/available
 - [x] check for site redirects
-- [ ] filter showing only fails
+- [x] filter showing only fails
 - [ ] add option to output JSON
 
 ## future ideas:
 
-- [ ] test multiple urls?
-- [ ] check if using Jquery and what version (>= v3.4.0)
+- [x] test multiple urls?
+- [x] check if using Jquery and what version (>= v3.4.0)
 - [ ] check other pages on the site (check links/imgs) using sitemap
 - [ ] add custom scripts \$`litmus-lab sodiumhalogen.com --script=./custom-tests.js`
 - [ ] test monthly form submission confirmation (customer gets monthly contact form submission test)
 - [ ] (custom script example) test monthly form submission confirmation (customer gets monthly contact form submission test)
 - [ ] update Slack of failures \$`litmus-lab -s sodiumhalogen.com --slack HOOK_URL`
 - [ ] SEO-related tests
-- [ ] spell-checking
+- [ ] spell-checking (maybe [GrammarBot](https://www.grammarbot.io/quickstart))
 - [ ] check for invalid HTML
 - [ ] STDs (site-transmited diseases, aka malware) 😝
 - [ ] console errors
