@@ -67,12 +67,16 @@ exports.findAnalytics = (html, site, filtered) => {
   analyticsparser.write(html);
   analyticsparser.end();
   if (isAnalyticsFound) {
+    if (!json) {
     if (filtered == false) {
     helpers.consoleLog(RESULT.PASS, `site has Google Analytics`);
   }
+}
     return true;
   } else {
+    if (!json) {
     helpers.consoleLog(RESULT.FAIL, `site does not have Google Analytics`);
+    }
     return false;
   }
 };
@@ -98,12 +102,16 @@ exports.checkForNoFollow = (html, site, filtered) => {
   nofollowparser.write(html);
   nofollowparser.end();
   if (noFollowFound) {
+    if (!json) {
     helpers.consoleLog(RESULT.FAIL, `site has a nofollow tag`);
+    }
     return true;
   } else {
+    if (!json) {
     if (filtered == false) {
     helpers.consoleLog(RESULT.PASS, `site does not have a nofollow tag`);
   }
+}
     return false;
   }
 };
@@ -111,12 +119,16 @@ exports.checkForNoFollow = (html, site, filtered) => {
 exports.checkGoogleCache = (html, site, filtered) => {
   let isCacheFound = html.includes("This is Google");
   if (isCacheFound) {
+    if (!json) {
     if (filtered == false) {
     helpers.consoleLog(RESULT.PASS, `site is cached by Google`);
     }
+  }
     return true;
   } else {
+    if (!json) {
     helpers.consoleLog(RESULT.FAIL, `site is not cached by Google`);
+    }
     return false;
   }
 };
@@ -155,32 +167,42 @@ exports.checkForJquery = async (html, site, filtered) => {
   jqueryParser.end();
 
   if (jqueryVersion === "none") {
+    if (!json) {
     if (filtered == false) {
     helpers.consoleLog(RESULT.PASS, `site does not have jQuery`);
   }
+}
     return false;
   }
   else if (jqueryVersion < "3.4.0") {
+    if (!json) {
     helpers.consoleLog(RESULT.FAIL, `jQuery version is unsafe`);
+    }
     return true;
   }
   else {
+    if (!json) {
     if (filtered == false) {
     helpers.consoleLog(RESULT.PASS, `jQuery version is safe`);
     }
-    return false;
+  }
+    return true;
   }
 }
 
 exports.checkForSitemap = async (sitemapUrl, site, filtered) => {
   let sitemap = await exports.testUrl(sitemapUrl);
   if (!sitemap) {
+    if (!json) {
     helpers.consoleLog(RESULT.FAIL, `sitemap does not exist`);
+    }
     return false;
   } else {
+    if (!json) {
     if (filtered == false) {
     helpers.consoleLog(RESULT.PASS, `sitemap exists`);
   }
+}
     return true;
   }
 };
@@ -193,12 +215,16 @@ exports.checkForConsoleErrors = async (html, site, filtered) => {
   variable should increment by 1 until the tool has checked the console logs completely */ 
   
   if (!consoleErrorCount) {
+    if (!json) {
     if (filtered == false) {
     helpers.consoleLog(RESULT.PASS, `There are no console errors.`); 
     }
+  }
     return false; 
   } else {
-    helpers.consoleLog(RESULT.FAIL, `There are ${consoleErrorCount} console errors`)
+    if (!json) {
+    helpers.consoleLog(RESULT.FAIL, `There are ${consoleErrorCount} console errors`);
+    } 
   }
 }
 
@@ -208,16 +234,20 @@ exports.checkLinks = async (linksArray, site, filtered) => {
     let goodLink = await exports.testUrl(linksArray[i]);
     if (!goodLink) {
       badLinks = 1;
+      if (!json) {
       helpers.consoleLog(RESULT.FAIL, `${linksArray[i]} leads to a 404`);
+      }
     }
   }
   if (!badLinks) {
+    if (!json) {
     if (filtered == false) {
     helpers.consoleLog(
       RESULT.PASS,
       `No 404 links were found on this site. [Count: ${linksArray.length} links]`
     );
   }
+}
     return false;
   } else {
     return true;

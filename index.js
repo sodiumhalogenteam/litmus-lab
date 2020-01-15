@@ -61,6 +61,7 @@ const main = async () => {
   }
   site = argv.s;
   filtered = argv.f;
+  json = argv.json; 
   if (!site) {
     // prompt user for input
     result = await prompts({
@@ -87,6 +88,23 @@ const main = async () => {
     filtered = false;
   }
 
+  if (!json) {
+    result = await prompts({
+      type: "text", 
+      name: "json", 
+      initial: "Type y or n", 
+      message: "Would you like to print JSON that contains the results of the tests instead of printing to the console?"
+    }); 
+    json = result.json
+  }
+
+  if (json == "y") {
+    json = true; 
+  } else {
+    json = false; 
+  }
+
+  
   site = await helpers.tidyURI(site);
   // get Google cache HTML from site
   let cacheCheckFailed = false;
@@ -165,27 +183,39 @@ const main = async () => {
 
   if (!foundError) {
     // test for google analytics
-    await tests.findAnalytics(html, site, filtered);
+    var googleAnalytics = await tests.findAnalytics(html, site, filtered, json);
 
     // check for noFollow
-    await tests.checkForNoFollow(html, site, filtered);
+    var noFollow = await tests.checkForNoFollow(html, site, filtered, json);
 
     // check for sitemap
-    await tests.checkForSitemap(site + "/sitemap.xml", site, filtered);
+    var sitemap = await tests.checkForSitemap(site + "/sitemap.xml", site, filtered, json);
 
     // check for jquery
-    await tests.checkForJquery(html, site, filtered);
+    var jquery = await tests.checkForJquery(html, site, filtered, json);
 
     // check for javascript console errors
-    // await tests.checkForConsoleErrors(html, site, filtered); 
+    // await tests.checkForConsoleErrors(html, site, filtered, json); 
 
     // check 404 link errors
-    const linkArray = await tests.collectLinks(html, site, filtered);
-    await tests.checkLinks(linkArray, site, filtered);
+    const linkArray = await tests.collectLinks(html, site, filtered, json);
+    var badLinks = await tests.checkLinks(linkArray, site, filtered, json);
     checkVersion();
   } else {
     console.log(`See above error to see why tests ad trouble.`);
   }
+  // making json object 
+  if (json) {
+  var jsonData = {
+    googleAnalytics: googleAnalytics, 
+    noFollow: noFollow, 
+    sitemap: sitemap, 
+    jquery: jquery, 
+    badLinks: badLinks
+  }
+  var jsonDataString = JSON.stringify(jsonData); 
+  console.log(jsonDataString); 
+}
   result = await prompts({
     type: "text",
     name: "testAnother",
