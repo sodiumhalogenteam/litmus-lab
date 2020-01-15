@@ -46,7 +46,7 @@ exports.collectLinks = async (html, site) => {
   return linkArr;
 };
 
-exports.findAnalytics = (html, site) => {
+exports.findAnalytics = (html, site, filtered) => {
   let isAnalyticsFound = false;
   let analyticsparser = new htmlparser.Parser(
     {
@@ -67,7 +67,9 @@ exports.findAnalytics = (html, site) => {
   analyticsparser.write(html);
   analyticsparser.end();
   if (isAnalyticsFound) {
+    if (filtered == false) {
     helpers.consoleLog(RESULT.PASS, `site has Google Analytics`);
+  }
     return true;
   } else {
     helpers.consoleLog(RESULT.FAIL, `site does not have Google Analytics`);
@@ -75,7 +77,7 @@ exports.findAnalytics = (html, site) => {
   }
 };
 
-exports.checkForNoFollow = (html, site) => {
+exports.checkForNoFollow = (html, site, filtered) => {
   let noFollowFound = false;
   const nofollowparser = new htmlparser.Parser(
     {
@@ -99,15 +101,19 @@ exports.checkForNoFollow = (html, site) => {
     helpers.consoleLog(RESULT.FAIL, `site has a nofollow tag`);
     return true;
   } else {
+    if (filtered == false) {
     helpers.consoleLog(RESULT.PASS, `site does not have a nofollow tag`);
+  }
     return false;
   }
 };
 
-exports.checkGoogleCache = (html, site) => {
+exports.checkGoogleCache = (html, site, filtered) => {
   let isCacheFound = html.includes("This is Google");
   if (isCacheFound) {
+    if (filtered == false) {
     helpers.consoleLog(RESULT.PASS, `site is cached by Google`);
+    }
     return true;
   } else {
     helpers.consoleLog(RESULT.FAIL, `site is not cached by Google`);
@@ -127,19 +133,76 @@ exports.testUrl = url => {
       return false;
     });
 };
+exports.checkForJquery = async (html, site, filtered) => {
+  let jqueryVersion = 'none';
+  const jqueryParser = new htmlparser.Parser(
+    {
+      onopentag: function(name, attribs) {
+        if (!attribs.src) return;
+        if (
+          name === "script" &&
+          attribs.src.includes("jquery-")
+        ) {
+          jqueryVersion = attribs.src.split("jquery-")[1];
+        }
+      }
+    },
+    { decodeEntities: true }
+  );
 
-exports.checkForSitemap = async (sitemapUrl, site) => {
+  // check for nofollow tag
+  jqueryParser.write(html);
+  jqueryParser.end();
+
+  if (jqueryVersion === "none") {
+    if (filtered == false) {
+    helpers.consoleLog(RESULT.PASS, `site does not have jQuery`);
+  }
+    return false;
+  }
+  else if (jqueryVersion < "3.4.0") {
+    helpers.consoleLog(RESULT.FAIL, `jQuery version is unsafe`);
+    return true;
+  }
+  else {
+    if (filtered == false) {
+    helpers.consoleLog(RESULT.PASS, `jQuery version is safe`);
+    }
+    return false;
+  }
+}
+
+exports.checkForSitemap = async (sitemapUrl, site, filtered) => {
   let sitemap = await exports.testUrl(sitemapUrl);
   if (!sitemap) {
     helpers.consoleLog(RESULT.FAIL, `sitemap does not exist`);
     return false;
   } else {
+    if (filtered == false) {
     helpers.consoleLog(RESULT.PASS, `sitemap exists`);
+  }
     return true;
   }
 };
+/* This Console Error Checker does not work yet. Right now all it does is say that every site 
+has no Javascript console errors because I don't know how to build something that allows for 
+me to check if a site has console errors. */ 
+exports.checkForConsoleErrors = async (html, site, filtered) => {
+  let consoleErrorCount = 0; 
+  /* the code for finding the error should be here. if an error is found, consoleErrorCount
+  variable should increment by 1 until the tool has checked the console logs completely */ 
+  
+  if (!consoleErrorCount) {
+    if (filtered == false) {
+    helpers.consoleLog(RESULT.PASS, `There are no console errors.`); 
+    }
+    return false; 
+  } else {
+    helpers.consoleLog(RESULT.FAIL, `There are ${consoleErrorCount} console errors`)
+  }
+}
 
-exports.checkLinks = async (linksArray, site) => {
+exports.checkLinks = async (linksArray, site, filtered) => {
   let badLinks = 0;
   for (let i = 0; i < linksArray.length; i += 1) {
     let goodLink = await exports.testUrl(linksArray[i]);
@@ -149,10 +212,12 @@ exports.checkLinks = async (linksArray, site) => {
     }
   }
   if (!badLinks) {
+    if (filtered == false) {
     helpers.consoleLog(
       RESULT.PASS,
       `No 404 links were found on this site. [Count: ${linksArray.length} links]`
     );
+  }
     return false;
   } else {
     return true;
