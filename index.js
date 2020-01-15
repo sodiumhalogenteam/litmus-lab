@@ -177,7 +177,7 @@ const main = async () => {
     await tests.checkForJquery(html, site, filtered);
 
     // check for javascript console errors
-    await tests.checkForConsoleErrors(html, site, filtered); 
+    // await tests.checkForConsoleErrors(html, site, filtered); 
 
     // check 404 link errors
     const linkArray = await tests.collectLinks(html, site, filtered);
