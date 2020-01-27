@@ -22,7 +22,7 @@ A site checker that tests elements of a website.
 - [x] check if site is up/available
 - [x] check for site redirects
 - [x] filter showing only fails
-- [ ] add option to output JSON
+- [x] add option to output JSON
 
 ## future ideas:
 
