@@ -175,7 +175,7 @@ const main = async () => {
 
     // check for jquery
     await tests.checkForJquery(html, site, filtered);
-
+    
     // check for javascript console errors
     // await tests.checkForConsoleErrors(html, site, filtered); 
 
