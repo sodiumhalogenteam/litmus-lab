@@ -173,8 +173,3 @@ test("checkGoogleCache() checks for Google Cache", async () => {
   const hasNoGoogleCache = await tests.checkGoogleCache(shHtml);
   expect(hasNoGoogleCache).toBeFalsy();
 });
-
-test("checkForJquery() checks for the presence of jQuery", () => {
-  let foundJquery = tests.checkForJquery(shHtml, "sodiumhalogen.com", false);
-  expect(foundJquery).toBe(true);
-});
